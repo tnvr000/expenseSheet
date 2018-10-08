@@ -1,13 +1,13 @@
 #include "Utility.cpp"
 
-void AccountOperation(int userPosition) {
+void accountOperation(int userPosition) {
     int userMenuChoice;
     Account user;
     user.Read(userPosition - 1);
     while(1) {
         system("cls");
         printf("WELCOME %s! How can I help you?\n", user.GetName());
-        AccountMenu();
+        accountMenu();
         fflush(stdin);
         scanf("%d", &userMenuChoice);
         switch(userMenuChoice) {
@@ -32,17 +32,17 @@ void AccountOperation(int userPosition) {
 
 }
 
-void MainOperation() {
-    int MainMenuChoice, logInStatus;
+void mainOperation() {
+    int mainMenuChoice, logInStatus;
     do {
         system("cls");
-        MainMenu();
-        cin >> MainMenuChoice;
-        switch (MainMenuChoice) {
+        mainMenu();
+        cin >> mainMenuChoice;
+        switch (mainMenuChoice) {
         case 1:
             logInStatus = LogIn();
             if(logInStatus != 0) {
-                AccountOperation(logInStatus);
+                accountOperation(logInStatus);
             }
             break;
         case 2:
@@ -54,11 +54,11 @@ void MainOperation() {
             break;
         case 4:
             system("cls");
-            ClosingLine();
+            closingLine();
             getch();
             break;
         default:
             printf("Invalid Option");
         }
-    } while (MainMenuChoice != 4);
+    } while (mainMenuChoice != 4);
 }

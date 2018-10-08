@@ -1,10 +1,10 @@
-void Introduction()
+void introduction()
 {
     printf("\n\n\n\n\n\t\t\t");
     printf("THE EXPENSE SHEET\n\t\t\tBY TANVEER\n");
 }
 
-void MainMenu()
+void mainMenu()
 {
     printf(" 1 : LOG INTO AN ACCOUNT\n");
     printf(" 2 : CREATE A NEW ACCOUNT\n");
@@ -13,7 +13,7 @@ void MainMenu()
     printf("\n ENTER YOUR CHOICE : ");
 }
 
-void AccountMenu()
+void accountMenu()
 {
     printf(" 1 : DISPLAY ALL ENTRIES\n");
     printf(" 2 : MAKE A NEW ENTRY\n");
@@ -22,7 +22,7 @@ void AccountMenu()
     printf("\n ENTER YOUR CHOICE : ");
 }
 
-void ClosingLine()
+void closingLine()
 {
     printf("\n\n\n\t\t\tTHANK YOU");
 }

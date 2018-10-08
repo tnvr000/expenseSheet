@@ -4,10 +4,10 @@ int main()
 {
     int MainMenuChoice;
     system("cls");
-    Introduction();
+    introduction();
     getch();
     Account::CreateFile();
     Account::OpenFile();
-    MainOperation();
+    mainOperation();
     Account::CloseFile();
 }
