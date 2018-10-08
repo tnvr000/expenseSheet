@@ -40,14 +40,14 @@ void mainOperation() {
         cin >> mainMenuChoice;
         switch (mainMenuChoice) {
         case 1:
-            logInStatus = LogIn();
+            logInStatus = logIn();
             if(logInStatus != 0) {
                 accountOperation(logInStatus);
             }
             break;
         case 2:
             system("cls");
-            CreateAccount();
+            createAccount();
             getch();
             break;
         case 3:

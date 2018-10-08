@@ -9,7 +9,7 @@
 #include "Account.cpp"
 #include "Files.cpp"
 
-void CreateAccount() {
+void createAccount() {
     Account user;
     char name[30], password[15], check[15], choice;
     while(1) {
@@ -60,7 +60,7 @@ void CreateAccount() {
     printf("\nACCOUNT CREATED SUCCESSFULLY!\n");
 }
 
-int LogIn() {
+int logIn() {
     char password[16], retryChoice;
     int isLoggedIn = 0, noOfAccounts, position;
     Account user;
