@@ -13,17 +13,17 @@ private:
 public:
     AccountData();
     AccountData(char*, char*, float, int);
-    void PrintAccount();
-    void Reset();
-    int IsAvailable();
-    void SetName(char*);
-    void SetPassword(char*);
-    void SetNoOfItems(int);
-    void SetSpent(float);
-    char* GetName();
-    char* GetPassword();
-    float GetSpent();
-    int GetNoOfItems();
+    void printAccount();
+    void reset();
+    int isAvailable();
+    void setName(char*);
+    void setPassword(char*);
+    void setNoOfItems(int);
+    void setSpent(float);
+    char* getName();
+    char* getPassword();
+    float getSpent();
+    int getNoOfItems();
 };
 
 AccountData::AccountData() {
@@ -39,33 +39,33 @@ AccountData::AccountData(char name[], char password[], float spent, int noOfItem
     this->noOfItems = noOfItems;
 }
 
-void AccountData::PrintAccount() {
+void AccountData::printAccount() {
     printf("%-20s %6.2f %-15d\n", name, spent, noOfItems);
 }
-void AccountData::SetName(char name[]) {
+void AccountData::setName(char name[]) {
     strcpy(this->name, name);
 }
-void AccountData::SetPassword(char password[]) {
+void AccountData::setPassword(char password[]) {
     strcpy(this->password, password);
 }
-void AccountData::SetNoOfItems(int noOfItems) {
+void AccountData::setNoOfItems(int noOfItems) {
     this->noOfItems = noOfItems;
 }
-void AccountData::SetSpent(float spent) {
+void AccountData::setSpent(float spent) {
     this->spent = spent;
 }
-char* AccountData::GetName() {
+char* AccountData::getName() {
     return name;
 }
-char* AccountData::GetPassword() {
+char* AccountData::getPassword() {
     return password;
 }
-int AccountData::GetNoOfItems() {
+int AccountData::getNoOfItems() {
     return noOfItems;
 }
-float AccountData::GetSpent() {
+float AccountData::getSpent() {
     return spent;
 }
-void AccountData::Reset() {
+void AccountData::reset() {
     spent = noOfItems = 0;
 }

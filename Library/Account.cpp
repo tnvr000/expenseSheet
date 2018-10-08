@@ -79,10 +79,10 @@ Account::Account () {
     ;
 }
 Account::Account (char name[], char password[], int noOfItems, float spent) {
-    data.SetName(name);
-    data.SetPassword(password);
-    data.SetNoOfItems(noOfItems);
-    data.SetSpent(spent);
+    data.setName(name);
+    data.setPassword(password);
+    data.setNoOfItems(noOfItems);
+    data.setSpent(spent);
     index = 0;
 }
 void Account::Read() {
@@ -93,7 +93,7 @@ void Account::Read(int index) {
     Read();
 }
 void Account::Print() {
-    printf("%-30s %6.2f %11d", data.GetName(), data.GetSpent(), data.GetNoOfItems());
+    printf("%-30s %6.2f %11d", data.getName(), data.getSpent(), data.getNoOfItems());
 }
 void Account::PrintAll() {
     file->seekg(0, ios::beg);
@@ -116,7 +116,7 @@ void Account::Write(int index) {
 }
 int Account::LogIn(char password[]) {
     Read(Account::index);
-    if(strcmp(data.GetPassword(), password) == 0) {
+    if(strcmp(data.getPassword(), password) == 0) {
         return 1;
     } else {
         return 0;
@@ -128,39 +128,39 @@ int Account::IsAvailable() {
     int currentAccountIndex = 0;
     while(currentAccountIndex++ < noOfAccounts) {
         file->read((char*)&tempData, sizeof(AccountData));
-        if(strcmp(tempData.GetName(), data.GetName()) == 0) {
+        if(strcmp(tempData.getName(), data.getName()) == 0) {
             return 0;
         }
     }
     return 1;
 }
 void Account::Reset() {
-    data.Reset();
+    data.reset();
 }
 void Account::SetName(char name[]) {
-    data.SetName(name);
+    data.setName(name);
 }
 void Account::SetPassword(char password[]) {
-    data.SetPassword(password);
+    data.setPassword(password);
 }
 void Account::SetNoOfItems(int noOfItems) {
-    data.SetNoOfItems(noOfItems);
+    data.setNoOfItems(noOfItems);
 }
 void Account::SetSpent(float spent) {
-    data.SetSpent(spent);
+    data.setSpent(spent);
 }
 void Account::SetIndex(int index) {
     this->index = index;
 }
 char* Account::GetName() {
-    return data.GetName();
+    return data.getName();
 }
 int Account::GetNoOfItems() {
-    return data.GetNoOfItems();
+    return data.getNoOfItems();
 }
 int Account::GetNoOfAccounts() {
     return Account::noOfAccounts;
 }
 float Account::GetSpent() {
-    return data.GetSpent();
+    return data.getSpent();
 }
