@@ -17,8 +17,8 @@ void CreateAccount() {
         printf("Enter your name : ");
         fflush(stdin);
         gets(name);
-        user.SetName(name);
-        if(user.IsAvailable() == 0) {
+        user.setName(name);
+        if(user.isAvailable() == 0) {
             printf("THIS USERNAME ALREADY TAKEN. DO WANT TRY ANOTHER ONE (Yes/No) ? : ");
             fflush(stdin);
             scanf("%c", &choice);
@@ -52,11 +52,11 @@ void CreateAccount() {
         }
 
     }
-    user.SetName(name);
-    user.SetPassword(password);
-    user.SetNoOfItems(0);
-    user.SetSpent(0);
-    user.Write();
+    user.setName(name);
+    user.setPassword(password);
+    user.setNoOfItems(0);
+    user.setSpent(0);
+    user.write();
     printf("\nACCOUNT CREATED SUCCESSFULLY!\n");
 }
 
@@ -64,12 +64,12 @@ int LogIn() {
     char password[16], retryChoice;
     int isLoggedIn = 0, noOfAccounts, position;
     Account user;
-    noOfAccounts = user.GetNoOfAccounts();
+    noOfAccounts = user.getNoOfAccounts();
     while(1) {
         system("cls");
         printf("INDEX   NAME                           SPENT    NO OF ITEMS\n");
         printf("----- x ------------------------------x------x-----------\n");
-        user.PrintAll();
+        user.printAll();
         printf("%5d : BACK TO MAIN MENU\n", noOfAccounts + 1);
         printf("CHOOSE AN OPTION : ");
         fflush(stdin);
@@ -77,11 +77,11 @@ int LogIn() {
         if(position > noOfAccounts) {
             return 0;
         }
-        user.SetIndex(position - 1);
+        user.setIndex(position - 1);
         printf("ENTER PASSWORD : ");
         fflush(stdin);
         gets(password);
-        if(user.LogIn(password) == 1) {
+        if(user.logIn(password) == 1) {
             printf("Log in Successful\n");
             getch();
             return position;

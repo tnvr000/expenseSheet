@@ -3,10 +3,10 @@
 void accountOperation(int userPosition) {
     int userMenuChoice;
     Account user;
-    user.Read(userPosition - 1);
+    user.read(userPosition - 1);
     while(1) {
         system("cls");
-        printf("WELCOME %s! How can I help you?\n", user.GetName());
+        printf("WELCOME %s! How can I help you?\n", user.getName());
         accountMenu();
         fflush(stdin);
         scanf("%d", &userMenuChoice);

@@ -6,8 +6,8 @@ int main()
     system("cls");
     introduction();
     getch();
-    Account::CreateFile();
-    Account::OpenFile();
+    Account::createFile();
+    Account::openFile();
     mainOperation();
-    Account::CloseFile();
+    Account::closeFile();
 }
