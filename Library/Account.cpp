@@ -85,16 +85,26 @@ Account::Account (char name[], char password[], int noOfItems, float spent) {
     data.setSpent(spent);
     index = 0;
 }
+
+//reads the account details from AccountFile.txt from current cursor position
+//Generally called immediatly 
 void Account::read() {
     file->read((char*)&data, sizeof(AccountData));
 }
+
+//reads the account details from AccountFile.txt from specified user index
+//cursor position is calculated by multiply index to size of AccountData
 void Account::read(int index) {
     file->seekg(index * sizeof(AccountData));
     read();
 }
+
+//prints the AccountData->data on the screen
 void Account::print() {
     printf("%-30s %6.2f %11d", data.getName(), data.getSpent(), data.getNoOfItems());
 }
+
+//prints all account details in AccountFile.txt prefixed with thier position
 void Account::printAll() {
     file->seekg(0, ios::beg);
     int currentAccountIndex = 0;
@@ -105,15 +115,25 @@ void Account::printAll() {
         printf("\n");
     }
 }
+
+//Appends the AccountData->data to the AccountFile.txt
+//Used for adding new user
 void Account::write() {
     file->seekp(0, ios::end);
     file->write((char*)&data, sizeof(AccountData));
     noOfAccounts += 1;
 }
+
+//Overwrites the account details in AccountFile.txt
+// of specified index with AccountData->data 
 void Account::write(int index) {
     file->seekp(index * sizeof(AccountData), ios::beg);
     file->write((char*)&data, sizeof(AccountData));
 }
+
+//log in only authenticate the password
+//password correct and returns 1
+//if possword is not correct return 2
 int Account::logIn(char password[]) {
     read(Account::index);
     if(strcmp(data.getPassword(), password) == 0) {
@@ -122,6 +142,10 @@ int Account::logIn(char password[]) {
         return 0;
     }
 }
+
+//Check if Account->data.name is avialbel for an new user or not
+//return 1 if available
+//else returns 0
 int Account::isAvailable() {
     file->seekg(0, ios::beg);
     AccountData tempData;
@@ -134,9 +158,13 @@ int Account::isAvailable() {
     }
     return 1;
 }
+
+//sets the AccountData->data.spent and AccountData->data.noOfItems to 0
 void Account::reset() {
     data.reset();
 }
+
+//setter methods
 void Account::setName(char name[]) {
     data.setName(name);
 }
@@ -152,6 +180,8 @@ void Account::setSpent(float spent) {
 void Account::setIndex(int index) {
     this->index = index;
 }
+
+//getter methods
 char* Account::getName() {
     return data.getName();
 }
