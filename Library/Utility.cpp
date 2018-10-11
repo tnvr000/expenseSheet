@@ -8,6 +8,16 @@
 #include "Date.cpp"
 #include "Account.cpp"
 
+void listUsers() {
+    Account user;
+    int noOfAccounts = user.getNoOfAccounts();
+    printf("INDEX   NAME                           SPENT    NO OF ITEMS\n");
+    printf("----- x ------------------------------x------x-----------\n");
+    user.printAll();
+    printf("%5d : BACK TO MAIN MENU\n", noOfAccounts + 1);
+    printf("CHOOSE AN OPTION : ");
+}
+
 void createAccount() {
     Account user;
     char name[30], password[15], check[15], choice;
@@ -66,11 +76,7 @@ int logIn() {
     noOfAccounts = user.getNoOfAccounts();
     while(1) {
         system("cls");
-        printf("INDEX   NAME                           SPENT    NO OF ITEMS\n");
-        printf("----- x ------------------------------x------x-----------\n");
-        user.printAll();
-        printf("%5d : BACK TO MAIN MENU\n", noOfAccounts + 1);
-        printf("CHOOSE AN OPTION : ");
+        listUsers();
         fflush(stdin);
         scanf("%d", &position);
         if(position > noOfAccounts) {
@@ -80,7 +86,7 @@ int logIn() {
         printf("ENTER PASSWORD : ");
         fflush(stdin);
         gets(password);
-        if(user.logIn(password) == 1) {
+        if(user.authenticate(password) == 1) {
             printf("Log in Successful\n");
             getch();
             return position;
@@ -94,4 +100,40 @@ int logIn() {
         }
     }
     getch();
+}
+
+void deleteAccount() {
+    char password[16], retryChoice;
+    Account user;
+    int position, noOfAccounts = user.getNoOfAccounts();
+    while(1) {
+        system("cls");
+        listUsers();
+        fflush(stdin);
+        scanf("%d", &position);
+
+        if (position > noOfAccounts) {
+            return;
+        }
+
+        user.setIndex(position - 1);
+        printf("ENTER PASSWORD : ");
+        fflush(stdin);
+        gets(password);
+
+        if (user.authenticate(password)) {
+            user.erase();
+            getch();
+            return;
+            //TO DO delete the user
+        } else {
+            printf("INCORRECT PASSWORD. DO YOU WANT TO TRY AGAIN (Yes/No) ? : ");
+            fflush(stdin);
+            scanf("%c", &retryChoice);
+            if(retryChoice == 'N' || retryChoice == 'n') {
+                return;
+            }
+        }
+
+    }
 }

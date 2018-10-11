@@ -51,6 +51,9 @@ void mainOperation() {
             getch();
             break;
         case 3:
+            system("cls");
+            deleteAccount();
+            getch();
             break;
         case 4:
             system("cls");
