@@ -123,7 +123,6 @@ void deleteAccount() {
 
         if (user.authenticate(password)) {
             user.erase();
-            getch();
             return;
             //TO DO delete the user
         } else {
@@ -134,6 +133,5 @@ void deleteAccount() {
                 return;
             }
         }
-
     }
 }
