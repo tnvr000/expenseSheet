@@ -3,7 +3,9 @@
 void accountOperation(int userPosition) {
     int userMenuChoice;
     Account user;
-    user.read(userPosition - 1);
+    user.setIndex(userPosition - 1);
+    user.readAtIndex(userPosition - 1);
+
     User manager(user.getName());
     while(1) {
         system("cls");

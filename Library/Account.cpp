@@ -49,8 +49,8 @@ public:
         getch();
         return flag;
     }
-    void read();
-    void read(int);
+    void readNext();
+    void readAtIndex(int);
     void print();
     void printAll();
     void write();
@@ -86,15 +86,15 @@ Account::Account (char name[], char password[], int noOfItems, float spent) {
 
 // reads the account details from AccountFile.txt from current cursor position
 // Generally called immediatly 
-void Account::read() {
+void Account::readNext() {
     file->read((char*)&data, sizeof(AccountData));
 }
 
 // reads the account details from AccountFile.txt from specified user index
 // cursor position is calculated by multiply index to size of AccountData
-void Account::read(int index) {
+void Account::readAtIndex(int index) {
     file->seekg(index * sizeof(AccountData));
-    read();
+    readNext();
 }
 
 // prints the AccountData->data on the screen
@@ -107,7 +107,7 @@ void Account::printAll() {
     file->seekg(0, ios::beg);
     int currentAccountIndex = 0;
     while(currentAccountIndex++ < noOfAccounts) {
-        read();
+        readNext();
         printf("%5d : ", currentAccountIndex);
         print();
         printf("\n");
@@ -155,7 +155,7 @@ void Account::erase() {
 //if correct, returns 1
 //if not, return 0
 int Account::authenticate(char password[]) {
-    read(Account::index);
+    readAtIndex(Account::index);
     if(strcmp(data.getPassword(), password) == 0) {
         return 1;
     } else {
