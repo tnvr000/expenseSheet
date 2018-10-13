@@ -2,6 +2,7 @@
 
 void accountOperation(int userPosition) {
     int userMenuChoice;
+    
     Account user;
     user.setIndex(userPosition - 1);
     user.read();
@@ -9,7 +10,6 @@ void accountOperation(int userPosition) {
     User manager(user.getName());
     while(1) {
         system("cls");
-        
         printf("WELCOME %s! How can I help you?\n", user.getName());
         accountMenu();
         fflush(stdin);
@@ -19,6 +19,8 @@ void accountOperation(int userPosition) {
             //TODO dislay menu
             break;
         case 2  :
+            manager.newItem();
+            getch();
             //TODO add item
             break;
         case 3  :

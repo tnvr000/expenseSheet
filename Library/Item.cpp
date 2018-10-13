@@ -41,7 +41,7 @@ Item :: Item(int day, int month, int year, char name[], float price, char remark
 
 void Item :: print() {
     date.printDate();
-    printf(" %30s %6.2d %20s", name, price, remark);
+    printf(" %-30s %6.2f %-20s", name, price, remark);
 }
 
 void Item :: askForItem() {
@@ -52,7 +52,7 @@ void Item :: askForItem() {
     
     printf("Enter prie of item : ");
     fflush(stdin);
-    scanf("%d", &price);
+    scanf("%f", &price);
 
     printf("Enter remark of item : ");
     fflush(stdin);

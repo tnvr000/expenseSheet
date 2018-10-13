@@ -39,6 +39,12 @@ void User :: close() {
     delete file;
 }
 
+// create a new item to save
+void User::newItem() {
+    item.askForItem();
+    item.print();
+}
+
 // read item from <username> file from current cursor position
 void User::readItem() {
     file->read((char*)&item, sizeof(Item));
