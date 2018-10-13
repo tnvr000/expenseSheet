@@ -51,6 +51,7 @@ public:
     }
     void readNext();
     void readAtIndex(int);
+    void read();
     void print();
     void printAll();
     void write();
@@ -94,6 +95,12 @@ void Account::readNext() {
 // cursor position is calculated by multiply index to size of AccountData
 void Account::readAtIndex(int index) {
     file->seekg(index * sizeof(AccountData));
+    readNext();
+}
+
+// reads the account details from AccountFile.txt at index Account->index
+void Account::read() {
+    file->seekp(Account::index * sizeof(AccountData));
     readNext();
 }
 

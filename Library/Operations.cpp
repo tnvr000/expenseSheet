@@ -4,7 +4,7 @@ void accountOperation(int userPosition) {
     int userMenuChoice;
     Account user;
     user.setIndex(userPosition - 1);
-    user.readAtIndex(userPosition - 1);
+    user.read();
 
     User manager(user.getName());
     while(1) {
