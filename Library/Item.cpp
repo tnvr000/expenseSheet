@@ -14,6 +14,7 @@ public:
     Item();
     Item(Date, char*, float, char*);
     Item(int, int, int, char*, float, char*);
+    void askForItem();
     void print();
     Date getDate();
     char* getName();
@@ -41,6 +42,21 @@ Item :: Item(int day, int month, int year, char name[], float price, char remark
 void Item :: print() {
     date.printDate();
     printf(" %30s %6.2d %20s", name, price, remark);
+}
+
+void Item :: askForItem() {
+    date.askForDate();
+    printf("Enter name of Item : ");
+    fflush(stdin);
+    gets(name);
+    
+    printf("Enter prie of item : ");
+    fflush(stdin);
+    scanf("%d", &price);
+
+    printf("Enter remark of item : ");
+    fflush(stdin);
+    gets(remark);
 }
 
 Date Item::getDate() {

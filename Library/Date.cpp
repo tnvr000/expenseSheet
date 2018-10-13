@@ -18,7 +18,7 @@ public:
     int getYear();
     Date getDate();
     void validateDate();
-    void readDate();
+    void askForDate();
     void printDate();
 };
 
@@ -84,7 +84,7 @@ void Date::validateDate() {
     }
 }
 
-void Date::readDate() {
+void Date::askForDate() {
     char temp;
     printf("Enter the date (dd/mm/yyyy) : ");
     scanf("%d%c%d%c%d", &day, &temp, &month, &temp, &year);

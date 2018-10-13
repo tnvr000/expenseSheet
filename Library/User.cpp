@@ -13,6 +13,7 @@ public:
     User(char*);
     void open();
     void close();
+    void newItem();
     void readItem();
     void writeItem();
     void writeItem(int);
