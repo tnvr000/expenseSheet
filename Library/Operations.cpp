@@ -4,6 +4,7 @@ void accountOperation(int userPosition) {
     int userMenuChoice;
     Account user;
     user.read(userPosition - 1);
+    User manager(user.getName());
     while(1) {
         system("cls");
         printf("WELCOME %s! How can I help you?\n", user.getName());
@@ -12,13 +13,13 @@ void accountOperation(int userPosition) {
         scanf("%d", &userMenuChoice);
         switch(userMenuChoice) {
         case 1  : 
-            //to dislay menu
+            //TODO dislay menu
             break;
         case 2  :
-            //to add item
+            //TODO add item
             break;
         case 3  :
-            //to delete last entry
+            //TODO delete last entry
             break;
         case 4  :
             printf("\nLOGGED OUT SUCCESSFULLY.");

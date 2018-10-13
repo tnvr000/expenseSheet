@@ -7,76 +7,90 @@ using namespace std;
 class Date
 {
 private:
-    int Day, Month, Year;
+    int day, month, year;
 public:
     Date(){;}
     Date(int, int, int);
-    int GetDay();
-    int GetMonth();
-    int GetYear();
-    void ValidateDate();
-    void ReadDate();
-    void PrintDate();
+    void setDate(int, int, int);
+    void setDate(Date);
+    int getDay();
+    int getMonth();
+    int getYear();
+    Date getDate();
+    void validateDate();
+    void readDate();
+    void printDate();
 };
 
-Date :: Date(int Day, int Month, int Year)
-{
-    this->Day = Day;
-    this->Month = Month;
-    this->Year = Year;
+Date::Date(int day, int month, int year) {
+    this->day = day;
+    this->month = month;
+    this->year = year;
+    validateDate();
 }
 
-int Date :: GetDay()
-{
-    return Day;
+void Date::setDate(int day, int month, int year) {
+    this->day = day;
+    this->month = month;
+    this->year = year;
+    validateDate();
+}
+void Date::setDate(Date date) {
+    this->day = date.day;
+    this->month = date.month;
+    this->year = date.year;
+    validateDate();
+}
+int Date::getDay() {
+    return day;
 }
 
-int Date :: GetMonth()
-{
-    return Month;
+int Date::getMonth() {
+    return month;
 }
 
-int Date :: GetYear()
-{
-    return Year;
+int Date::getYear() {
+    return year;
 }
 
-void Date ::ValidateDate()
-{
-    if(Month > 12)
-        Month = Month % 12;
-    if (Month == 1 || Month == 3 || Month == 5 || Month == 7 || Month == 8 || Month == 10 || Month == 12)
+Date Date::getDate() {
+    Date date(day, month, year);
+    return date;
+};
+
+void Date::validateDate() {
+    if(month > 12)
+        month = month % 12;
+    if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12)
     {
-        if(Day > 31)
-            Day %= 31;
+        if(day > 31)
+            day %= 31;
     }
-    else if (Month == 4 || Month == 6 || Month == 9 || Month == 11)
+    else if (month == 4 || month == 6 || month == 9 || month == 11)
     {
-        if(Day > 30)
-        Day %= 30;
+        if(day > 30)
+        day %= 30;
     }
-    else if (Month == 4)
+    else if (month == 4)
     {
-        if (Year / 4 == 0 && Day > 29)
+        if (year / 4 == 0 && day > 29)
         {
-            Day %= 29;
+            day %= 29;
         }
-        else if (Day > 28)
+        else if (day > 28)
         {
-            Day %= 28;
+            day %= 28;
         }
     }
 }
 
-void Date ::ReadDate()
-{
+void Date::readDate() {
     char temp;
     printf("Enter the date (dd/mm/yyyy) : ");
-    scanf("%d%c%d%c%d", &Day, &temp, &Month, &temp, &Year);
-    ValidateDate();
+    scanf("%d%c%d%c%d", &day, &temp, &month, &temp, &year);
+    validateDate();
 }
 
-void Date ::PrintDate()
-{
-    printf("%02d/%02d/%d", Day, Month, Year);
+void Date ::printDate() {
+    printf("%02d/%02d/%d", day, month, year);
 }
