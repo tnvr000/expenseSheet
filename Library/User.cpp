@@ -11,16 +11,25 @@ class User {
 public:
     ~User();
     User(char*);
+    void reset();
     void open();
     void close();
+    void logOut();
     void newItem();
     void readItem();
     void writeItem();
     void writeItem(int);
     int getNoOfItems();
 };
-User :: ~User() {
+void User::reset() {
     close();
+    fstream f(username, ios::out | ios::trunc);
+    f.close();
+    open();
+}
+
+User :: ~User() {
+    logOut();
 }
 User :: User(char username[30]) {
     strcpy(this->username, username);
@@ -36,6 +45,10 @@ void User :: open() {
 
 void User :: close() {
     file->close();
+}
+
+void User::logOut() {
+    close();
     delete file;
 }
 

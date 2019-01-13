@@ -67,6 +67,10 @@ void createAccount() {
     user.setNoOfItems(0);
     user.setSpent(0);
     user.write();
+    char filePath[] = "Data/";
+    strcat(filePath, user.getName());
+    fstream file(filePath, ios::out);
+    file.close();
     printf("\nACCOUNT CREATED SUCCESSFULLY!\n");
 }
 

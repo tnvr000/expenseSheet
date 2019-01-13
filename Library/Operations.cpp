@@ -3,14 +3,14 @@
 void accountOperation(int userPosition) {
     int userMenuChoice;
     
-    Account user;
-    user.setIndex(userPosition - 1);
-    user.read();
+    Account userDetails;
+    userDetails.setIndex(userPosition - 1);
+    userDetails.read();
 
-    User manager(user.getName());
+    User user(userDetails.getName());
     while(1) {
         system("cls");
-        printf("WELCOME %s! How can I help you?\n", user.getName());
+        printf("WELCOME %s! How can I help you?\n", userDetails.getName());
         accountMenu();
         fflush(stdin);
         scanf("%d", &userMenuChoice);
@@ -19,7 +19,7 @@ void accountOperation(int userPosition) {
             //TODO dislay menu
             break;
         case 2  :
-            manager.newItem();
+            user.newItem();
             getch();
             //TODO add item
             break;
@@ -27,6 +27,7 @@ void accountOperation(int userPosition) {
             //TODO delete last entry
             break;
         case 4  :
+            // The destrutor will cleanup the object and memory
             printf("\nLOGGED OUT SUCCESSFULLY.");
             getch();
             return;
