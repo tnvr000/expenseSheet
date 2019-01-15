@@ -19,8 +19,8 @@ void accountOperation(int userPosition) {
             //TODO dislay menu
             break;
         case 2  :
-            user.newItem();
-            getch();
+            printf("%d", user.getNoOfItems());
+            addItem(&user);
             //TODO add item
             break;
         case 3  :
@@ -28,6 +28,7 @@ void accountOperation(int userPosition) {
             break;
         case 4  :
             // The destrutor will cleanup the object and memory
+            user.logOut();
             printf("\nLOGGED OUT SUCCESSFULLY.");
             getch();
             return;

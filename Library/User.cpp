@@ -8,7 +8,7 @@ class User {
     char username[30];
     void open(char*);
     int countNoOfItems();
-public:
+    public:
     ~User();
     User(char*);
     void reset();
@@ -35,12 +35,11 @@ User :: User(char username[30]) {
     strcpy(this->username, username);
     file = new fstream();
     open();
-    noOfItems = getNoOfItems();
 }
 
 void User :: open() {
     file->open(username, ios::in | ios::out | ios::binary | ios::ate);
-    noOfItems = countNoOfItems();
+    this->noOfItems = countNoOfItems();
 }
 
 void User :: close() {
@@ -63,12 +62,25 @@ void User::readItem() {
     file->read((char*)&item, sizeof(Item));
 }
 
+void User::writeItem() {
+    file->seekp(0, ios::end);
+    file->write((char*)&item, sizeof(Item));
+}
+
+void User::writeItem(int index) {
+    file->seekp(index * sizeof(Item));
+    file->write((char*)&item, sizeof(Item));
+}
+
 int User::getNoOfItems() {
-    return noOfItems;
+    return this->noOfItems;
 }
 
 int User::countNoOfItems() {
     file->seekp(0, ios::end);
-    int filesize = file->tellp();
+    int filesize = (int)file->tellp();
+    printf("%d", filesize);
+    if(filesize < 0)
+        filesize = 0;
     return filesize / (sizeof(Item));
 }

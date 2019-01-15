@@ -140,3 +140,10 @@ void deleteAccount() {
         }
     }
 }
+
+void addItem(User* user) {
+    system("cls");
+    user->newItem();
+    user->writeItem();
+    getch();
+}

@@ -10,7 +10,7 @@ class Item {
     Date date;
     char name[30], remark[20];
     float price;
-public:
+    public:
     Item();
     Item(Date, char*, float, char*);
     Item(int, int, int, char*, float, char*);
