@@ -20,7 +20,17 @@ class User {
     void writeItem();
     void writeItem(int);
     int getNoOfItems();
+    bool isOpen();
 };
+User :: ~User() {
+    logOut();
+}
+
+User :: User(char username[30]) {
+    strcpy(this->username, username);
+    file = new fstream();
+}
+
 void User::reset() {
     close();
     fstream f(username, ios::out | ios::trunc);
@@ -28,13 +38,15 @@ void User::reset() {
     open();
 }
 
-User :: ~User() {
-    logOut();
-}
-User :: User(char username[30]) {
-    strcpy(this->username, username);
-    file = new fstream();
-    open();
+bool User :: isOpen() {
+    bool isOpen = file->is_open();
+    if(isOpen) {
+        printf("file is open");
+    } else {
+        printf("file is not open");
+    }
+    getch();
+    return isOpen;
 }
 
 void User :: open() {
