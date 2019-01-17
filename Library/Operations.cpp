@@ -19,7 +19,6 @@ void accountOperation(int userPosition) {
             //TODO dislay menu
             break;
         case 2  :
-            printf("%d", user.getNoOfItems());
             addItem(&user);
             //TODO add item
             break;

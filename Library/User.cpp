@@ -19,6 +19,9 @@ class User {
     void readItem();
     void writeItem();
     void writeItem(int);
+    void createDataSource();
+    char* getFilePath();
+    char* getName();
     int getNoOfItems();
     bool isOpen();
 };
@@ -49,18 +52,36 @@ bool User :: isOpen() {
     return isOpen;
 }
 
+char* User :: getFilePath() {
+    char filePath[100] = "Data/";
+    strcpy(filePath, strcat(filePath, this->username));
+    return filePath;
+}
+
+char* User :: getName() {
+    return this->username;
+}
+
+void User :: createDataSource() {
+    // fstream file()
+}
+
 void User :: open() {
     file->open(username, ios::in | ios::out | ios::binary | ios::ate);
     this->noOfItems = countNoOfItems();
 }
 
 void User :: close() {
-    file->close();
+    if(!file)
+        return;
+    if(isOpen())
+        file->close();
 }
 
 void User::logOut() {
     close();
     delete file;
+    file = nullptr;
 }
 
 // create a new item to save

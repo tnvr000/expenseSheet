@@ -6,10 +6,10 @@ using namespace std;
 
 class Date
 {
-private:
+    private:
     int day, month, year;
-public:
-    Date(){;}
+    public:
+    Date();
     Date(int, int, int);
     void setDate(int, int, int);
     void setDate(Date);
@@ -21,7 +21,9 @@ public:
     void askForDate();
     void printDate();
 };
-
+Date :: Date() {
+    day = month = year = 0;
+}
 Date::Date(int day, int month, int year) {
     this->day = day;
     this->month = month;
@@ -35,12 +37,14 @@ void Date::setDate(int day, int month, int year) {
     this->year = year;
     validateDate();
 }
+
 void Date::setDate(Date date) {
     this->day = date.day;
     this->month = date.month;
     this->year = date.year;
     validateDate();
 }
+
 int Date::getDay() {
     return day;
 }
@@ -87,6 +91,7 @@ void Date::validateDate() {
 void Date::askForDate() {
     char temp;
     printf("Enter the date (dd/mm/yyyy) : ");
+    fflush(stdin);
     scanf("%d%c%d%c%d", &day, &temp, &month, &temp, &year);
     validateDate();
 }
