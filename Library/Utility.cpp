@@ -67,10 +67,7 @@ void createAccount() {
     user.setNoOfItems(0);
     user.setSpent(0);
     user.write();
-    char filePath[] = "Data/";
-    strcat(filePath, user.getName());
-    fstream file(filePath, ios::out);
-    file.close();
+    User::createDataSource(user.getName());
     printf("\nACCOUNT CREATED SUCCESSFULLY!\n");
 }
 
@@ -128,6 +125,8 @@ void deleteAccount() {
 
         if (user.authenticate(password)) {
             user.erase();
+
+            User::deleteDataSource(user.getName());
             return;
             //TO DO delete the user
         } else {

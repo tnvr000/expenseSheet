@@ -19,7 +19,8 @@ class User {
     void readItem();
     void writeItem();
     void writeItem(int);
-    void createDataSource();
+    static void createDataSource(char* username);
+    static void deleteDataSource(char* username);
     char* getFilePath();
     char* getName();
     int getNoOfItems();
@@ -62,12 +63,20 @@ char* User :: getName() {
     return this->username;
 }
 
-void User :: createDataSource() {
-    // fstream file()
+void User :: createDataSource(char username[]) {
+    string filePath = "Data/" + (string)username;
+    fstream file(filePath, ios::out);
+    file.close();
+}
+
+void User :: deleteDataSource(char username[]) {
+    char filePath[100] = "Data/";
+    strcat(filePath, username);
+    remove((char*)filePath);
 }
 
 void User :: open() {
-    file->open(username, ios::in | ios::out | ios::binary | ios::ate);
+    file->open(getFilePath(), ios::in | ios::out | ios::binary | ios::ate);
     this->noOfItems = countNoOfItems();
 }
 
