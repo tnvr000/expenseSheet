@@ -2,7 +2,6 @@
 
 int main()
 {
-    User::createDataSource("tahir");
     int MainMenuChoice;
     system("cls");
     introduction();

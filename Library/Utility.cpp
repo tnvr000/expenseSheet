@@ -125,10 +125,8 @@ void deleteAccount() {
 
         if (user.authenticate(password)) {
             user.erase();
-
             User::deleteDataSource(user.getName());
             return;
-            //TO DO delete the user
         } else {
             printf("INCORRECT PASSWORD. DO YOU WANT TO TRY AGAIN (Yes/No) ? : ");
             fflush(stdin);

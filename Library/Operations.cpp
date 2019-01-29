@@ -8,6 +8,7 @@ void accountOperation(int userPosition) {
     userDetails.read();
 
     User user(userDetails.getName());
+    user.open();
     while(1) {
         system("cls");
         printf("WELCOME %s! How can I help you?\n", userDetails.getName());

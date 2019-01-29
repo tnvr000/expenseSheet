@@ -21,6 +21,7 @@ class User {
     void writeItem(int);
     static void createDataSource(char* username);
     static void deleteDataSource(char* username);
+    static char* getFilePath(char* username);
     char* getFilePath();
     char* getName();
     int getNoOfItems();
@@ -53,6 +54,12 @@ bool User :: isOpen() {
     return isOpen;
 }
 
+char* User :: getFilePath(char username[]) {
+    char filePath[100] = "Data/";
+    strcpy(filePath, strcat(filePath, username));
+    return filePath;
+}
+
 char* User :: getFilePath() {
     char filePath[100] = "Data/";
     strcpy(filePath, strcat(filePath, this->username));
@@ -76,7 +83,9 @@ void User :: deleteDataSource(char username[]) {
 }
 
 void User :: open() {
-    file->open(getFilePath(), ios::in | ios::out | ios::binary | ios::ate);
+    char filePath[100] = "Data/";
+    strcat(filePath, this->username);
+    file->open(filePath, ios::in | ios::out | ios::binary | ios::ate);
     this->noOfItems = countNoOfItems();
 }
 
