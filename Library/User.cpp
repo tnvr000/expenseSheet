@@ -17,8 +17,10 @@ class User {
     void logOut();
     void newItem();
     void readItem();
+    void readItemAt(int index);
     void writeItem();
-    void writeItem(int);
+    void writeItem(int index);
+    void printItemsBetweenDate(Date dateRangeStart, Date dateRangeEnd);
     static void createDataSource(char* username);
     static void deleteDataSource(char* username);
     static char* getFilePath(char* username);
@@ -113,14 +115,27 @@ void User::readItem() {
     file->read((char*)&item, sizeof(Item));
 }
 
+// Read item details from <username> file from specified index
+void User::readItemAt(int index) {
+    file->seekg(index * sizeof(Item));
+    file->read((char*)&item, sizeof(Item));
+}
+
 void User::writeItem() {
     file->seekp(0, ios::end);
     file->write((char*)&item, sizeof(Item));
 }
 
+/* Overwrites the Item details in <username> file at specified index
+ * with User->item
+*/
 void User::writeItem(int index) {
     file->seekp(index * sizeof(Item));
     file->write((char*)&item, sizeof(Item));
+}
+
+void User::printItemsBetweenDate(Date dateRangeStart, Date dateRangeEnd) {
+    
 }
 
 int User::getNoOfItems() {
