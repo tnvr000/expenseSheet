@@ -18,6 +18,8 @@ void accountOperation(int userPosition) {
         switch(userMenuChoice) {
         case 1  : 
             //TODO dislay menu
+            displayMenu(&user);
+            getch();
             break;
         case 2  :
             addItem(&user);

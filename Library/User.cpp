@@ -1,5 +1,6 @@
 #include <string.h>
 #include "Item.cpp"
+#include "vector"
 
 class User {
     Item item;
@@ -14,19 +15,21 @@ class User {
     void reset();
     void open();
     void close();
+    void save();
     void logOut();
     void newItem();
     void readItem();
     void readItemAt(int index);
     void writeItem();
     void writeItem(int index);
-    void printItemsBetweenDate(Date dateRangeStart, Date dateRangeEnd);
+    void printItemsBetweenDates(Date dateRangeStart, Date dateRangeEnd);
     static void createDataSource(char* username);
     static void deleteDataSource(char* username);
     static char* getFilePath(char* username);
     char* getFilePath();
     char* getName();
     int getNoOfItems();
+    vector<int> getYears();
     bool isOpen();
 };
 User :: ~User() {
@@ -98,6 +101,11 @@ void User :: close() {
         file->close();
 }
 
+void User::save() {
+    User::close();
+    User::open();
+}
+
 void User::logOut() {
     close();
     delete file;
@@ -124,6 +132,7 @@ void User::readItemAt(int index) {
 void User::writeItem() {
     file->seekp(0, ios::end);
     file->write((char*)&item, sizeof(Item));
+    this->save();
 }
 
 /* Overwrites the Item details in <username> file at specified index
@@ -132,14 +141,44 @@ void User::writeItem() {
 void User::writeItem(int index) {
     file->seekp(index * sizeof(Item));
     file->write((char*)&item, sizeof(Item));
+    this->save();
 }
 
-void User::printItemsBetweenDate(Date dateRangeStart, Date dateRangeEnd) {
-    
+void User::printItemsBetweenDates(Date dateRangeStart, Date dateRangeEnd) {
+    file->seekg(0, ios::beg);
+    for(int i = 0; i < this->getNoOfItems(); ++i) {
+        this->readItem();
+        if(item.getDate() >= dateRangeStart && item.getDate() <= dateRangeEnd) {
+            item.print();
+            cout<<endl;
+        }
+    }
 }
 
 int User::getNoOfItems() {
     return this->noOfItems;
+}
+
+vector<int> User::getYears() {
+    vector<int> years;
+    Item tempItem;
+    int year;
+    bool isYearNotPresent;
+    file->seekg(0, ios::beg);
+    for (int i = 0; i < this->getNoOfItems(); ++i ) {
+        this->readItem();
+        year = item.getDate().getYear();
+        isYearNotPresent = true;
+        for (int j = 0; j < years.size(); ++j) {
+            if(years.at(j) == year) {
+                isYearNotPresent = false;
+            }
+        }
+        if(isYearNotPresent) {
+            years.emplace_back(year);
+        }
+    }
+    return years;
 }
 
 int User::countNoOfItems() {

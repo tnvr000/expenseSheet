@@ -144,3 +144,22 @@ void addItem(User* user) {
     user->writeItem();
     getch();
 }
+
+void displayMenu(User* user) {
+    Date dateRangeStart(23, 4, 2019), dateRangeEnd(24, 4, 2019);
+    // user->printItemsBetweenDates(dateRangeStart, dateRangeEnd);
+    vector<int> years = user->getYears();
+    int index, noOfYears = years.size(), yearChoice;
+    if(noOfYears == 0) {
+        printf("NO RECORDS PRESENT");
+        getch();
+        return;
+    }
+    for(index = 1; index <= noOfYears; ++index) {
+        printf("%d : %d\n", index,  years.at(index - 1));
+    }
+    printf("%d : DISPLAY ALL RECORDS\n", index);
+    printf("\nCHOOSE AN OPTION : ");
+    scanf("%d", &yearChoice);
+    printf("%d", yearChoice);
+} 
