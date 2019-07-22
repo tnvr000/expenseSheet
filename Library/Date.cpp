@@ -11,13 +11,17 @@ class Date
 
     public:
     Date();
-    Date(int, int, int);
-    void setDate(int, int, int);
+    Date(int day, int month, int year);
+    void setDate(int day, int month, int tear);
     void setDate(Date);
     int getDay();
     int getMonth();
     int getYear();
     Date getDate();
+    Date getBeginingOfMonth();
+    Date getBeginingOfYear();
+    Date getEndOfMonth();
+    Date getEndOfYear();
     void validateDate();
     void askForDate();
     void printDate();
@@ -77,7 +81,50 @@ Date Date::getDate()
 {
     Date date(day, month, year);
     return date;
-};
+}
+
+Date Date::getBeginingOfMonth() 
+{
+    return Date(1, this->getMonth(), this->getYear());
+}
+
+Date Date::getBeginingOfYear() 
+{
+    return Date(1, 1, this->getYear());
+}
+
+Date Date::getEndOfMonth() 
+{
+    int lastDay;
+    int month = this->getMonth();
+    int year = this->getYear();
+    if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || 
+        month == 10 || month == 12)
+    {
+        lastDay = 31;
+    }
+    else if (month == 4 || month == 6 || month == 9 || month == 11)
+    {
+        lastDay = 30;
+    } 
+    else
+    {
+        if (year % 4 == 0)
+        {
+            lastDay = 29;
+        }
+        else
+        {
+            lastDay = 28;
+        }
+    }
+    return Date(lastDay, month, year);
+}
+
+Date Date::getEndOfYear()
+{
+    return Date(31, 12, this->getYear());
+}
 
 void Date::validateDate()
 {
