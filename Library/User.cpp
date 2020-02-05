@@ -26,6 +26,7 @@ class User {
     void printItemsForYear(int year);
     void printItemsForYearAndMonth(int years, int month);
     void printItemsBetweenDates(Date dateRangeStart, Date dateRangeEnd);
+    void deleteLastRecord();
     static void createDataSource(char* username);
     static void deleteDataSource(char* username);
     static char* getFilePath(char* username);
@@ -189,6 +190,25 @@ void User::printItemsBetweenDates(Date dateRangeStart, Date dateRangeEnd) {
             cout<<endl;
         }
     }
+}
+
+void User::deleteLastRecord()
+{
+    fstream tempUserFile("Data/tempUserFile", ios::out | ios::binary | ios::app);
+    Item tempItem;
+    char userFilepath[100] = "Data/";
+    strcat(userFilepath, this->username);
+    file->seekg(0, ios::beg);
+    for(int i = 0; i < getNoOfItems() - 1; ++i)
+    {
+        file->read((char*)&tempItem, sizeof(Item));
+        tempUserFile.write((char*)&tempItem, sizeof(Item));
+    }
+    tempUserFile.close();
+    file->close();
+    remove(userFilepath);
+    rename("Data/tempUserFile", userFilepath);
+    this->open();
 }
 
 int User::getNoOfItems() {

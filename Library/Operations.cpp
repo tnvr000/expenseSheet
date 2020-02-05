@@ -27,6 +27,8 @@ void accountOperation(int userPosition) {
             break;
         case 3  :
             //TODO delete last entry
+            deleteItem(&user);
+            getch();
             break;
         case 4  :
             // The destrutor will cleanup the object and memory

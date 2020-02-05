@@ -207,6 +207,13 @@ void yearlyDisplayMenu(User* user)
     } while (yearChoice != (lastYearPosition + 2));
 }
 
+void deleteItem(User* user)
+{
+    system("cls");
+    user->deleteLastRecord();
+    printf("LAST RECORD DELETED");
+}
+
 void displayMenu(User* user) {
     yearlyDisplayMenu(user);
 }
