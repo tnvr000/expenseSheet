@@ -150,8 +150,8 @@ void User::writeItem(int index) {
 void User::printItemsForAllYears() {
     vector<int> years = this->getYears();
     Date dateRangeStart, daterangeEnd;
-    dateRangeStart.setDate(1, 1, years.front());
-    daterangeEnd.setDate(31, 12, years.back());
+    dateRangeStart.setDate(years.front(), 1, 1);
+    daterangeEnd.setDate(years.back(), 12, 31);
 
     system("cls");
 
@@ -161,8 +161,8 @@ void User::printItemsForAllYears() {
 void User::printItemsForYear(int year)
 {
     Date DateRangeStart, dateRangeEnd;
-    DateRangeStart.setDate(1, 1, year);
-    dateRangeEnd.setDate(31, 12, year);
+    DateRangeStart.setDate(year, 1, 1);
+    dateRangeEnd.setDate(year, 12, 31);
 
     system("cls");
 
@@ -172,7 +172,7 @@ void User::printItemsForYear(int year)
 void User::printItemsForYearAndMonth(int year, int month)
 {
     Date dateRangeStart, dateRangeEnd;
-    dateRangeStart.setDate(1, month, year);
+    dateRangeStart.setDate(year, month, 1);
     dateRangeEnd = dateRangeStart.getEndOfMonth();
 
     system("cls");

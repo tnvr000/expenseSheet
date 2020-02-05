@@ -11,8 +11,10 @@ class Date
 
     public:
     Date();
-    Date(int day, int month, int year);
-    void setDate(int day, int month, int tear);
+    Date(int year);
+    Date(int year, int month);
+    Date(int year, int month, int day);
+    void setDate(int year, int month, int day);
     void setDate(Date);
     int getDay();
     int getMonth();
@@ -38,7 +40,20 @@ Date ::Date()
     day = month = year = 0;
 }
 
-Date::Date(int day, int month, int year)
+Date ::Date(int year)
+{
+    this->year = year;
+    this->month = this->day = 0;
+}
+
+Date ::Date(int year, int month)
+{
+    this->year = year;
+    this->month = month;
+    this-> day = 0;
+}
+
+Date::Date(int year, int month, int day)
 {
     this->day = day;
     this->month = month;
@@ -46,7 +61,7 @@ Date::Date(int day, int month, int year)
     validateDate();
 }
 
-void Date::setDate(int day, int month, int year)
+void Date::setDate(int year, int month, int day)
 {
     this->day = day;
     this->month = month;
@@ -79,18 +94,18 @@ int Date::getYear()
 
 Date Date::getDate()
 {
-    Date date(day, month, year);
+    Date date(this->year, this->month, this->day);
     return date;
 }
 
 Date Date::getBeginingOfMonth() 
 {
-    return Date(1, this->getMonth(), this->getYear());
+    return Date(this->getYear(), this->getMonth(), 1);
 }
 
 Date Date::getBeginingOfYear() 
 {
-    return Date(1, 1, this->getYear());
+    return Date(this->getYear(), 1, 1);
 }
 
 Date Date::getEndOfMonth() 
@@ -118,12 +133,12 @@ Date Date::getEndOfMonth()
             lastDay = 28;
         }
     }
-    return Date(lastDay, month, year);
+    return Date(year, month, lastDay);
 }
 
 Date Date::getEndOfYear()
 {
-    return Date(31, 12, this->getYear());
+    return Date(this->getYear(), 12, 31);
 }
 
 void Date::validateDate()

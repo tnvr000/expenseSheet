@@ -33,7 +33,7 @@ Item :: Item(Date date, char name[], float price, char remark[]) {
 }
 
 Item :: Item(int day, int month, int year, char name[], float price, char remark[]) {
-    this->date.setDate(day, month, year);
+    this->date.setDate(year, month, day);
     strcpy(this->name, name);
     this->price = price;
     strcpy(this->remark, remark);
