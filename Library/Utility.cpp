@@ -145,21 +145,92 @@ void addItem(User* user) {
     getch();
 }
 
-void displayMenu(User* user) {
-    Date dateRangeStart(23, 4, 2019), dateRangeEnd(24, 4, 2019);
-    // user->printItemsBetweenDates(dateRangeStart, dateRangeEnd);
+void monhtlyDisplayMenu(User* user, int year)
+{
+    void displayMonths();
+    int monthChoice;
+    do
+    {
+        system("cls");
+        displayMonths();
+        printf("13 : DISPLAY ALL EXPENSE THIS YEAR\n14 : BACK\n");
+        printf("\nCHOOSE AN OPTION : ");
+        scanf("%d", &monthChoice);
+
+        if(monthChoice >= 1 && monthChoice <= 12)
+        {
+            user->printItemsForYearAndMonth(year, monthChoice);
+            getch();
+        }
+        else if (monthChoice == 13)
+        {
+            user->printItemsForYear(year);
+            getch();
+        }
+        else
+        {
+            monthChoice = 14;
+        }
+    } while(monthChoice != 14);
+}
+
+void yearlyDisplayMenu(User* user) 
+{
+    void displayYears(vector<int> years);
     vector<int> years = user->getYears();
-    int index, noOfYears = years.size(), yearChoice;
-    if(noOfYears == 0) {
-        printf("NO RECORDS PRESENT");
-        getch();
-        return;
+    int yearChoice, lastYearPosition, lastYearIndex;
+    do 
+    {
+        system("cls");
+        displayYears(years);
+        lastYearPosition = years.size();
+        printf("%d : DISPLAY ALL RECORDS\n", (lastYearPosition + 1));
+        printf("%d : BACK\n", (lastYearPosition + 2));
+        printf("\nCHOOSE AN OPTION : ");
+        scanf("%d", &yearChoice);
+        if(yearChoice >= 1 && yearChoice <= lastYearPosition)
+        {
+            monhtlyDisplayMenu(user, years.at(yearChoice - 1));
+        }
+        else if (yearChoice == (lastYearPosition + 1)) 
+        {
+            user->printItemsForAllYears();
+            getch();
+        }
+        else
+        {
+            // year choice can be (lastYearPosition + 2) or greater than that
+            // So if it greater than that then...
+            yearChoice = lastYearPosition + 2;
+        }
+        
+    } while (yearChoice != (lastYearPosition + 2));
+}
+
+void displayMenu(User* user) {
+    yearlyDisplayMenu(user);
+}
+
+void displayYears(vector<int> years)
+{
+    for(int index = 0; index < years.size(); ++index)
+    {
+        printf("%d : %d\n", (index + 1), years.at(index));
     }
-    for(index = 1; index <= noOfYears; ++index) {
-        printf("%d : %d\n", index,  years.at(index - 1));
-    }
-    printf("%d : DISPLAY ALL RECORDS\n", index);
-    printf("\nCHOOSE AN OPTION : ");
-    scanf("%d", &yearChoice);
-    printf("%d", yearChoice);
-} 
+}
+
+void displayMonths()
+{
+    printf("1  : January\n");
+    printf("2  : Febuary\n");
+    printf("3  : March\n");
+    printf("4  : April\n");
+    printf("5  : May\n");
+    printf("6  : June\n");
+    printf("7  : July\n");
+    printf("8  : August\n");
+    printf("9  : Setember\n");
+    printf("10 : October\n");
+    printf("11 : November\n");
+    printf("12 : December\n");
+}

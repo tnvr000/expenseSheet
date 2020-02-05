@@ -22,6 +22,9 @@ class User {
     void readItemAt(int index);
     void writeItem();
     void writeItem(int index);
+    void printItemsForAllYears();
+    void printItemsForYear(int year);
+    void printItemsForYearAndMonth(int years, int month);
     void printItemsBetweenDates(Date dateRangeStart, Date dateRangeEnd);
     static void createDataSource(char* username);
     static void deleteDataSource(char* username);
@@ -142,6 +145,39 @@ void User::writeItem(int index) {
     file->seekp(index * sizeof(Item));
     file->write((char*)&item, sizeof(Item));
     this->save();
+}
+
+void User::printItemsForAllYears() {
+    vector<int> years = this->getYears();
+    Date dateRangeStart, daterangeEnd;
+    dateRangeStart.setDate(1, 1, years.front());
+    daterangeEnd.setDate(31, 12, years.back());
+
+    system("cls");
+
+    this->printItemsBetweenDates(dateRangeStart, daterangeEnd);
+}
+
+void User::printItemsForYear(int year)
+{
+    Date DateRangeStart, dateRangeEnd;
+    DateRangeStart.setDate(1, 1, year);
+    dateRangeEnd.setDate(31, 12, year);
+
+    system("cls");
+
+    this->printItemsBetweenDates(DateRangeStart, dateRangeEnd);
+}
+
+void User::printItemsForYearAndMonth(int year, int month)
+{
+    Date dateRangeStart, dateRangeEnd;
+    dateRangeStart.setDate(1, month, year);
+    dateRangeEnd = dateRangeStart.getEndOfMonth();
+
+    system("cls");
+
+    this->printItemsBetweenDates(dateRangeStart, dateRangeEnd);
 }
 
 void User::printItemsBetweenDates(Date dateRangeStart, Date dateRangeEnd) {
