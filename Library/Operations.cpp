@@ -23,11 +23,13 @@ void accountOperation(int userPosition) {
             break;
         case 2  :
             addItem(&user);
+            updateAccountDetails(&userDetails, &user);
             //TODO add item
             break;
         case 3  :
             //TODO delete last entry
             deleteItem(&user);
+            updateAccountDetails(&userDetails, &user);
             getch();
             break;
         case 4  :

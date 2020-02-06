@@ -22,6 +22,7 @@ class Account
     void printAll();
     void write();
     void write(int);
+    void save();
     void erase();
     int authenticate(char*);
     int isAvailable();
@@ -154,6 +155,10 @@ void Account::write() {
 void Account::write(int index) {
     file->seekp(index * sizeof(AccountData), ios::beg);
     file->write((char*)&data, sizeof(AccountData));
+}
+
+void Account::save() {
+    this->write(this->index);
 }
 
 /* creates a tempAccountFile.txt and copy-paste every AccountData

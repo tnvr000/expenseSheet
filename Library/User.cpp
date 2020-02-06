@@ -5,10 +5,12 @@
 class User {
     Item item;
     int noOfItems, index;
+    float spent;
     fstream *file;
     char username[30];
     void open(char*);
-    int countNoOfItems();
+    void countNoOfItems();
+    void calculateSpent();
     public:
     ~User();
     User(char*);
@@ -33,6 +35,7 @@ class User {
     char* getFilePath();
     char* getName();
     int getNoOfItems();
+    float getSpent();
     vector<int> getYears();
     bool isOpen();
 };
@@ -95,7 +98,7 @@ void User :: open() {
     char filePath[100] = "Data/";
     strcat(filePath, this->username);
     file->open(filePath, ios::in | ios::out | ios::binary | ios::ate);
-    this->noOfItems = countNoOfItems();
+    calculateSpent();
 }
 
 void User :: close() {
@@ -237,11 +240,26 @@ vector<int> User::getYears() {
     return years;
 }
 
-int User::countNoOfItems() {
+void User::countNoOfItems() {
     file->seekp(0, ios::end);
     int filesize = (int)file->tellp();
     printf("%d", filesize);
     if(filesize < 0)
         filesize = 0;
-    return filesize / (sizeof(Item));
+    this->noOfItems = (filesize / (sizeof(Item)));
+}
+
+void User::calculateSpent() {
+    float spent = 0;
+    this->countNoOfItems();
+    file->seekg(0, ios::beg);
+    for(int i = 0; i < this->getNoOfItems(); ++i) {
+        this->readItem();
+        spent += this->item.getPrice();
+    }
+    this->spent = spent;
+}
+
+float User::getSpent() {
+    return this->spent;
 }

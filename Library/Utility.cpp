@@ -241,3 +241,9 @@ void displayMonths()
     printf("11 : November\n");
     printf("12 : December\n");
 }
+
+void updateAccountDetails(Account* userAccount, User* user) {
+    userAccount->setSpent(user->getSpent());
+    userAccount->setNoOfItems(user->getNoOfItems());
+    userAccount->save();
+}
