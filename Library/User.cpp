@@ -185,14 +185,19 @@ void User::printItemsForYearAndMonth(int year, int month)
 }
 
 void User::printItemsBetweenDates(Date dateRangeStart, Date dateRangeEnd) {
+    float spent = 0;
     file->seekg(0, ios::beg);
+    item.printHeaders();
+    cout<<endl;
     for(int i = 0; i < this->getNoOfItems(); ++i) {
         this->readItem();
         if(item.getDate() >= dateRangeStart && item.getDate() <= dateRangeEnd) {
+            spent += item.getPrice();
             item.print();
-            cout<<endl;
+            cout<<"\n";
         }
     }
+    Item::printTotal(spent);
 }
 
 void User::deleteLastRecord()
