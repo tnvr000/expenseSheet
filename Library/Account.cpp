@@ -1,50 +1,43 @@
 #include <string.h>
 #include "AccountData.cpp"
-class Account
-{ 
+class Account { 
     AccountData data;
     static int noOfAccounts, index;
     static fstream* file;
     public:
     Account ();
-    Account (char*, char*, int, float);
+    Account (string name, string password, int noOfItems, float spent);
 
     static void createFile();
     static void openFile();
     static void closeFile();
     static void countNoOfAccounts ();
-    static int isFileOpen();
+    static bool isFileOpen();
     
     void readNext();
-    void readAtIndex(int);
+    void readAtIndex(int index);
     void read();
     void print();
     void printAll();
     void write();
-    void write(int);
+    void write(int index);
     void save();
     void erase();
-    int authenticate(char*);
-    int isAvailable();
+    bool authenticate(string password);
+    bool isAvailable();
     void reset();
-    void setName(char*);
-    void setPassword(char*);
-    void setNoOfItems(int);
-    void setSpent(float);
-    void setIndex(int);
-    char* getName();
-    int getNoOfItems();
+    void setIndex(int index);
     int getNoOfAccounts();
-    float getSpent();
+    AccountData* getAccountData();
 };
 
 fstream* Account::file = new fstream();
 int Account::noOfAccounts = 0;
 int Account::index = 0;
-Account::Account () {
-    ;
-}
-Account::Account (char name[], char password[], int noOfItems, float spent) {
+
+Account::Account () { ; }
+
+Account::Account (string name, string password, int noOfItems, float spent) {
     data.setName(name);
     data.setPassword(password);
     data.setNoOfItems(noOfItems);
@@ -54,7 +47,7 @@ Account::Account (char name[], char password[], int noOfItems, float spent) {
 
 /* a file, if doesn't exist, will not be opened unless it is opened in "out"  and "append" mode
  * but opening a file in append mean the get and put pointers can't to changed by seekg() and seekp()
-*/
+ */
 void Account :: createFile() {
     fstream f("Data/AccountFile.txt", ios::in | ios::out | ios::binary | ios::app);
     f.close();
@@ -62,21 +55,21 @@ void Account :: createFile() {
 
 /* OpenFile() streams the "AccountFile.txt" file accessible by file attribute which is static,
  * makes it available to every object of Account class
-*/
+ */
 void Account :: openFile() {
     countNoOfAccounts();
     file->open("Data/AccountFile.txt", ios::in | ios::out | ios::binary | ios::ate);
 }
 
 /* closes the file and delete the allocated memory
-*/
+ */
 void Account :: closeFile() {
     file->close();
     delete file;
 }
 
 /* count the no of users recored in the file for convinience
-*/
+ */
 void Account :: countNoOfAccounts () {
     Account tempAccount;
     fstream f("Data/AccountFile.txt", ios::in | ios::binary);
@@ -86,11 +79,13 @@ void Account :: countNoOfAccounts () {
     f.close();
 }
 
-int Account :: isFileOpen() {
-    int flag = 0;
+/* checks if the AccountFile.txt is open or not
+ */
+bool Account :: isFileOpen() {
+    bool flag = false;
     if(*file) {
         printf("File is open\n");
-        flag = 1;
+        flag = true;
     } else {
         printf("File is not open\n");
     }
@@ -101,34 +96,34 @@ int Account :: isFileOpen() {
 
 /*  reads the account details from AccountFile.txt from current cursor position
  * Generally called immediatly
-*/ 
+ */ 
 void Account::readNext() {
     file->read((char*)&data, sizeof(AccountData));
 }
 
 /* reads the account details from AccountFile.txt from specified user index
  * cursor position is calculated by multiply index to size of AccountData
-*/
+ */
 void Account::readAtIndex(int index) {
     file->seekg(index * sizeof(AccountData));
     readNext();
 }
 
 /* reads the account details from AccountFile.txt at index Account->index
-*/
+ */
 void Account::read() {
     file->seekp(Account::index * sizeof(AccountData));
     readNext();
 }
 
 /* prints the AccountData->data on the screen
-*/
+ */
 void Account::print() {
-    printf("%-30s %6.2f %11d", data.getName(), data.getSpent(), data.getNoOfItems());
+    printf("%-30s %6.2f %11d", data.getName().c_str(), data.getSpent(), data.getNoOfItems());
 }
 
 /* prints all account details in AccountFile.txt prefixed with thier position
-*/
+ */
 void Account::printAll() {
     file->seekg(0, ios::beg);
     int currentAccountIndex = 0;
@@ -142,7 +137,7 @@ void Account::printAll() {
 
 /* Appends the AccountData->data to the AccountFile.txt
  * Used for adding new user
-*/
+ */
 void Account::write() {
     file->seekp(0, ios::end);
     file->write((char*)&data, sizeof(AccountData));
@@ -151,12 +146,14 @@ void Account::write() {
 
 /* Overwrites the account details in AccountFile.txt
  * of specified index with AccountData->data 
-*/
+ */
 void Account::write(int index) {
     file->seekp(index * sizeof(AccountData), ios::beg);
     file->write((char*)&data, sizeof(AccountData));
 }
 
+/* save the changes made in the AccountData->data
+ */
 void Account::save() {
     this->write(this->index);
 }
@@ -165,7 +162,7 @@ void Account::save() {
  * except current user (the (Account->index)+1) user)
  * then closes both files, removes original AccountFile.txt,
  * renames tempAccountFile.txt to AccountFile.txt and reopens the file 
-*/
+ */
 void Account::erase() {
     fstream tempFile("Data/tempAccountFile.txt", ios::out | ios::binary | ios::app);
     AccountData tempData;
@@ -187,68 +184,44 @@ void Account::erase() {
 /* Authenticate the password
  * if correct, returns 1
  * if not, return 0
-*/
-int Account::authenticate(char password[]) {
+ */
+bool Account::authenticate(string password) {
     readAtIndex(Account::index);
-    if(strcmp(data.getPassword(), password) == 0) {
-        return 1;
-    } else {
-        return 0;
-    }
+    return data.getPassword() == password;
 }
 
 /* Check if Account->data.name is avialable for an new user or not
  * return 1 if available
  * else returns 0
-*/
-int Account::isAvailable() {
+ */
+bool Account::isAvailable() {
     file->seekg(0, ios::beg);
     AccountData tempData;
     int currentAccountIndex = 0;
     while(currentAccountIndex++ < noOfAccounts) {
         file->read((char*)&tempData, sizeof(AccountData));
-        if(strcmp(tempData.getName(), data.getName()) == 0) {
-            return 0;
+        if(tempData.getName() == data.getName()) {
+            return false;
         }
     }
-    return 1;
+    return true;
 }
 
 /* sets the AccountData->data.spent and AccountData->data.noOfItems to 0
-*/
+ */
 void Account::reset() {
     data.reset();
 }
 
-/* setter methods
-*/
-void Account::setName(char name[]) {
-    data.setName(name);
-}
-void Account::setPassword(char password[]) {
-    data.setPassword(password);
-}
-void Account::setNoOfItems(int noOfItems) {
-    data.setNoOfItems(noOfItems);
-}
-void Account::setSpent(float spent) {
-    data.setSpent(spent);
-}
+// setter methods
 void Account::setIndex(int index) {
     this->index = index;
 }
 
-/* getter methods
-*/
-char* Account::getName() {
-    return data.getName();
-}
-int Account::getNoOfItems() {
-    return data.getNoOfItems();
-}
+// getter methods
 int Account::getNoOfAccounts() {
     return Account::noOfAccounts;
 }
-float Account::getSpent() {
-    return data.getSpent();
+AccountData* Account::getAccountData() {
+    return &(this->data);
 }

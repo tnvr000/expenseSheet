@@ -4,8 +4,7 @@
 
 using namespace std;
 
-class Date
-{
+class Date {
     private:
     int day, month, year;
 
@@ -14,6 +13,12 @@ class Date
     Date(int year);
     Date(int year, int month);
     Date(int year, int month, int day);
+    void askForDate();
+    void printDate();
+    void validateDate();
+    bool is31DayMonth();
+    bool is30DayMonth();
+    bool isLeapYear();
     void setDate(int year, int month, int day);
     void setDate(Date);
     int getDay();
@@ -24,9 +29,7 @@ class Date
     Date getBeginingOfYear();
     Date getEndOfMonth();
     Date getEndOfYear();
-    void validateDate();
-    void askForDate();
-    void printDate();
+    int getLastDayOfMonth();
     int operator==(Date otherDate);
     int operator!=(Date othreDate);
     int operator>(Date otherDate);
@@ -34,142 +37,32 @@ class Date
     int operator>=(Date otherDate);
     int operator<=(Date otherDate);
 };
-
-Date ::Date()
-{
+// constructors
+Date ::Date() {
     day = month = year = 0;
 }
 
-Date ::Date(int year)
-{
+Date ::Date(int year) {
     this->year = year;
     this->month = this->day = 0;
 }
 
-Date ::Date(int year, int month)
-{
+Date ::Date(int year, int month) {
     this->year = year;
     this->month = month;
     this-> day = 0;
 }
 
-Date::Date(int year, int month, int day)
-{
+Date::Date(int year, int month, int day) {
     this->day = day;
     this->month = month;
     this->year = year;
     validateDate();
 }
 
-void Date::setDate(int year, int month, int day)
-{
-    this->day = day;
-    this->month = month;
-    this->year = year;
-    validateDate();
-}
-
-void Date::setDate(Date date)
-{
-    this->day = date.day;
-    this->month = date.month;
-    this->year = date.year;
-    validateDate();
-}
-
-int Date::getDay()
-{
-    return day;
-}
-
-int Date::getMonth()
-{
-    return month;
-}
-
-int Date::getYear()
-{
-    return year;
-}
-
-Date Date::getDate()
-{
-    Date date(this->year, this->month, this->day);
-    return date;
-}
-
-Date Date::getBeginingOfMonth() 
-{
-    return Date(this->getYear(), this->getMonth(), 1);
-}
-
-Date Date::getBeginingOfYear() 
-{
-    return Date(this->getYear(), 1, 1);
-}
-
-Date Date::getEndOfMonth() 
-{
-    int lastDay;
-    int month = this->getMonth();
-    int year = this->getYear();
-    if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || 
-        month == 10 || month == 12)
-    {
-        lastDay = 31;
-    }
-    else if (month == 4 || month == 6 || month == 9 || month == 11)
-    {
-        lastDay = 30;
-    } 
-    else
-    {
-        if (year % 4 == 0)
-        {
-            lastDay = 29;
-        }
-        else
-        {
-            lastDay = 28;
-        }
-    }
-    return Date(year, month, lastDay);
-}
-
-Date Date::getEndOfYear()
-{
-    return Date(this->getYear(), 12, 31);
-}
-
-void Date::validateDate()
-{
-    if (month > 12)
-        month = month % 12;
-    if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12)
-    {
-        if (day > 31)
-            day %= 31;
-    }
-    else if (month == 4 || month == 6 || month == 9 || month == 11)
-    {
-        if (day > 30)
-            day %= 30;
-    }
-    else if (month == 4)
-    {
-        if (year / 4 == 0 && day > 29)
-        {
-            day %= 29;
-        }
-        else if (day > 28)
-        {
-            day %= 28;
-        }
-    }
-}
-
-void Date::askForDate()
-{
+/* promt for input date via console
+ */
+void Date::askForDate() {
     char temp;
     printf("Enter the date (dd/mm/yyyy) : ");
     fflush(stdin);
@@ -177,109 +70,175 @@ void Date::askForDate()
     validateDate();
 }
 
-void Date ::printDate()
-{
+/* print the data to comsoole in format dd/mm/yyyy
+ */
+void Date ::printDate() {
     printf("%02d/%02d/%d", day, month, year);
 }
 
-int Date::operator==(Date otherDate)
-{
-    if (this->year == otherDate.year && this->month == otherDate.month && this->day == otherDate.day)
-    {
-        return 1;
+/* checks if the date is valid, and make it valid if it is not.
+ * for example:
+ * 20/13/1999 becomes 20/1/1669
+ * 32/1/1999 becomes 1/1/1999
+ */
+void Date::validateDate() {
+    if(this->month > 12) {
+        this->month %= 12;
     }
-    else
-    {
-        return 0;
-    }
-}
-
-int Date::operator!=(Date otherDate)
-{
-    if (*this == otherDate)
-    {
-        return 0;
-    }
-    else
-    {
-        return 1;
+    if(this->day > this->getLastDayOfMonth()) {
+        this->day %= this->getLastDayOfMonth();
     }
 }
 
-int Date::operator>(Date otherDate)
-{
-    if (this->year > otherDate.year)
-    {
+/* checks if the current month have 31 days
+ */
+bool Date::is31DayMonth() {
+    bool flag = false;
+    switch(this->month) {
+        case  1 : ;
+        case  3 : ;
+        case  5 : ;
+        case  7 : ;
+        case  8 : ;
+        case 10 : ;
+        case 12 : flag = true;
+    }
+    return flag;
+}
+
+/* checks if the current month have 30 days
+ */
+bool Date::is30DayMonth() {
+    bool flag = false;
+    switch(this->month) {
+        case  4 : ;
+        case  6 : ;
+        case  9 : ;
+        case 11 : flag = true;
+    }
+    return flag;
+}
+
+/* checks if the current year is leap year
+ */
+bool Date::isLeapYear() {
+    return (this->year % 4 == 0);
+}
+
+// setter methods
+void Date::setDate(int year, int month, int day) {
+    this->day = day;
+    this->month = month;
+    this->year = year;
+    validateDate();
+}
+void Date::setDate(Date date) {
+    this->day = date.day;
+    this->month = date.month;
+    this->year = date.year;
+    validateDate();
+}
+
+// getter methods
+int Date::getDay() {
+    return this->day;
+}
+int Date::getMonth() {
+    return this->month;
+}
+int Date::getYear() {
+    return this->year;
+}
+Date Date::getDate() {
+    Date date(this->year, this->month, this->day);
+    return date;
+}
+Date Date::getBeginingOfMonth() {
+    return Date(this->getYear(), this->getMonth(), 1);
+}
+Date Date::getBeginingOfYear() {
+    return Date(this->getYear(), 1, 1);
+}
+Date Date::getEndOfMonth() {
+    return Date(this->year, this->month, this->getLastDayOfMonth());
+}
+Date Date::getEndOfYear() {
+    return Date(this->year, 12, 31);
+}
+int Date::getLastDayOfMonth() {
+    int day;
+    if(this->is31DayMonth()) {
+        day = 31;
+    } else if(this->is30DayMonth()) {
+        day = 30;
+    } else { // this is febuary month
+        day = this->isLeapYear() ? 29 : 28;
+    }
+    return day;
+}
+
+// overloaded operators
+int Date::operator==(Date otherDate) {
+    if (this->year == otherDate.year && this->month == otherDate.month && this->day == otherDate.day) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+int Date::operator!=(Date otherDate) {
+    if (*this == otherDate) {
+        return 0;
+    } else {
         return 1;
     }
-    else if (this->year < otherDate.year)
-    {
+}
+int Date::operator>(Date otherDate) {
+    if (this->year > otherDate.year) {
+        return 1;
+    } else if (this->year < otherDate.year) {
         return 0;
     }
 
-    if (this->month > otherDate.month)
-    {
+    if (this->month > otherDate.month) {
         return 1;
-    }
-    else if (this->month < otherDate.month)
-    {
+    } else if (this->month < otherDate.month) {
         return 0;
     }
 
-    if (this->day > otherDate.day)
-    {
+    if (this->day > otherDate.day) {
         return 1;
     }
     return 0;
 }
-
-int Date::operator<(Date otherDate)
-{
-    if (this->year < otherDate.year)
-    {
+int Date::operator<(Date otherDate) {
+    if (this->year < otherDate.year) {
         return 1;
-    }
-    else if (this->year > otherDate.year)
-    {
+    } else if (this->year > otherDate.year) {
         return 0;
     }
 
-    if (this->month < otherDate.month)
-    {
+    if (this->month < otherDate.month) {
         return 1;
-    }
-    else if (this->month > otherDate.month)
-    {
+    } else if (this->month > otherDate.month) {
         return 0;
     }
 
-    if (this->day < otherDate.day)
-    {
+    if (this->day < otherDate.day) {
         return 1;
     }
     return 0;
 }
-
-int Date::operator>=(Date otherDate)
-{
-    if (*this < otherDate)
-    {
+int Date::operator>=(Date otherDate) {
+    if (*this < otherDate) {
         return 0;
-    }
-    else
-    {
+    } else {
         return 1;
     }
 }
-
-int Date::operator<=(Date otherDate)
-{
-    if (*this > otherDate)
-    {
+int Date::operator<=(Date otherDate) {
+    if (*this > otherDate) {
         return 0;
-    }
-    else
-    {
+    } else {
         return 1;
     }
 }

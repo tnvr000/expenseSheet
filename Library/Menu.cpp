@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 void introduction() {
     printf("\n\n\n\n\n\t\t\t");
     printf("THE EXPENSE SHEET\n\t\t\tBY TANVEER\n");

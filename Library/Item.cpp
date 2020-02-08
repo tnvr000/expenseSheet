@@ -15,38 +15,57 @@ class Item {
 
     public:
     Item();
-    Item(Date, char*, float, char*);
-    Item(int, int, int, char*, float, char*);
+    Item(Date date, string name, float price, string remark);
+    Item(int year, int month, int day, string name, float price, string remark);
     void askForItem();
     void printHeaders();
     void print();
     static void printUnderlines();
     static void printTotal(float spent);
     Date getDate();
-    char* getName();
+    string getName();
     float getPrice();
-    char* getRemark();
+    string getRemark();
 };
 
 int Item::index = 0;
 
+// contructors
 Item :: Item() {
     ;
 }
-Item :: Item(Date date, char name[], float price, char remark[]) {
+Item :: Item(Date date, string name, float price, string remark) {
     this->date.setDate(date);
-    strcpy(this->name, name);
+    strcpy(this->name, name.c_str());
     this->price = price;
-    strcpy(this->remark, remark);
+    strcpy(this->remark, remark.c_str());
 }
-
-Item :: Item(int day, int month, int year, char name[], float price, char remark[]) {
+Item :: Item(int year, int month, int day, string name, float price, string remark) {
     this->date.setDate(year, month, day);
-    strcpy(this->name, name);
+    strcpy(this->name, name.c_str());
     this->price = price;
-    strcpy(this->remark, remark);
+    strcpy(this->remark, remark.c_str());
 }
 
+/* promts for input item details via console
+ */
+void Item :: askForItem() {
+    date.askForDate();
+    printf("Enter name of Item : ");
+    fflush(stdin);
+    gets(name);
+    
+    printf("Enter prie of item : ");
+    fflush(stdin);
+    scanf("%f", &price);
+
+    printf("Enter remark of item : ");
+    fflush(stdin);
+    gets(remark);
+}
+
+/* prints headers for displaying item list
+ */
 void Item::printHeaders() {
     Item::index = 0;
     ios state(nullptr);
@@ -84,6 +103,8 @@ void Item::printHeaders() {
     Item::printUnderlines();
 }
 
+/* prints underlines that aligns with the headers
+ */
 void Item::printUnderlines() {
     ios state(nullptr);
     state.copyfmt(cout);
@@ -112,6 +133,8 @@ void Item::printUnderlines() {
     cout.copyfmt(state);
 }
 
+/* prints items details in a format
+ */
 void Item :: print() {
     char fillingChar[2] = {' ', '-'};
     date.printDate();
@@ -149,6 +172,8 @@ void Item :: print() {
     Item::index++;
 }
 
+/* ptints provided spent amount in a format
+ */
 void Item::printTotal(float spent) {
     Item::printUnderlines();
     cout<<"\n";
@@ -185,33 +210,16 @@ void Item::printTotal(float spent) {
     Item::printUnderlines();
 }
 
-void Item :: askForItem() {
-    date.askForDate();
-    printf("Enter name of Item : ");
-    fflush(stdin);
-    gets(name);
-    
-    printf("Enter prie of item : ");
-    fflush(stdin);
-    scanf("%f", &price);
-
-    printf("Enter remark of item : ");
-    fflush(stdin);
-    gets(remark);
-}
-
+// getters
 Date Item::getDate() {
     return date.getDate();
 }
-
-char* Item :: getName() {
+string Item :: getName() {
     return name;
 }
-
 float Item :: getPrice() {
     return price;
 }
-
-char* Item :: getRemark() {
+string Item :: getRemark() {
     return remark;
 }

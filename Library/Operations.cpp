@@ -7,27 +7,24 @@ void accountOperation(int userPosition) {
     userDetails.setIndex(userPosition - 1);
     userDetails.read();
 
-    User user(userDetails.getName());
+    User user(userDetails.getAccountData()->getName());
     user.open();
     while(1) {
         system("cls");
-        printf("WELCOME %s! How can I help you?\n", userDetails.getName());
+        printf("WELCOME %s! How can I help you?\n", userDetails.getAccountData()->getName());
         accountMenu();
         fflush(stdin);
         scanf("%d", &userMenuChoice);
         switch(userMenuChoice) {
         case 1  : 
-            //TODO dislay menu
             displayMenu(&user);
             getch();
             break;
         case 2  :
             addItem(&user);
             updateAccountDetails(&userDetails, &user);
-            //TODO add item
             break;
         case 3  :
-            //TODO delete last entry
             deleteItem(&user);
             updateAccountDetails(&userDetails, &user);
             getch();

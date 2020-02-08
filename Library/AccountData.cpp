@@ -6,47 +6,59 @@
 
 using namespace std;
 class AccountData {
-private:
+    private:
     char name[30], password[15];
     int noOfItems;
     float spent;
-public:
+    
+    public:
     AccountData();
-    AccountData(char*, char*, float, int);
+    AccountData(string name, string password, float spent, int noOfItem);
     void printAccount();
     void reset();
     int isAvailable();
-    void setName(char*);
-    void setPassword(char*);
-    void setNoOfItems(int);
-    void setSpent(float);
-    char* getName();
-    char* getPassword();
+    void setName(string name);
+    void setPassword(string password);
+    void setNoOfItems(int noOfItems);
+    void setSpent(float spent);
+    string getName();
+    string getPassword();
     float getSpent();
     int getNoOfItems();
 };
 
+// contructors
 AccountData::AccountData() {
     strcpy(name, "");
     strcpy(password, "");
     spent = 0;
     noOfItems = 0;
 }
-AccountData::AccountData(char name[], char password[], float spent, int noOfItems) {
-    strcpy(this->name, name);
-    strcpy(this->password, password);
+AccountData::AccountData(string name, string password, float spent, int noOfItems) {
+    strcpy(this->name, name.c_str());
+    strcpy(this->password, password.c_str());
     this->spent = spent;
     this->noOfItems = noOfItems;
 }
 
+/* prints account details in a format
+ */
 void AccountData::printAccount() {
     printf("%-20s %6.2f %-15d\n", name, spent, noOfItems);
 }
-void AccountData::setName(char name[]) {
-    strcpy(this->name, name);
+
+/* resets noOfItems and spent to 0 in the object
+ */
+void AccountData::reset() {
+    spent = noOfItems = 0;
 }
-void AccountData::setPassword(char password[]) {
-    strcpy(this->password, password);
+
+// setter methods
+void AccountData::setName(string name) {
+    strcpy(this->name, name.c_str());
+}
+void AccountData::setPassword(string password) {
+    strcpy(this->password, password.c_str());
 }
 void AccountData::setNoOfItems(int noOfItems) {
     this->noOfItems = noOfItems;
@@ -54,10 +66,12 @@ void AccountData::setNoOfItems(int noOfItems) {
 void AccountData::setSpent(float spent) {
     this->spent = spent;
 }
-char* AccountData::getName() {
+
+// getter methods
+string AccountData::getName() {
     return name;
 }
-char* AccountData::getPassword() {
+string AccountData::getPassword() {
     return password;
 }
 int AccountData::getNoOfItems() {
@@ -65,7 +79,4 @@ int AccountData::getNoOfItems() {
 }
 float AccountData::getSpent() {
     return spent;
-}
-void AccountData::reset() {
-    spent = noOfItems = 0;
 }

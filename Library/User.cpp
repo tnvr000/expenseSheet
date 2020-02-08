@@ -1,4 +1,4 @@
-#include <string.h>
+#include <string>
 #include "Item.cpp"
 #include "vector"
 
@@ -8,99 +8,73 @@ class User {
     float spent;
     fstream *file;
     char username[30];
-    void open(char*);
+    void open(string username);
     void countNoOfItems();
     void calculateSpent();
+
     public:
     ~User();
-    User(char*);
+    User(string username);
     void reset();
     void open();
+    void reload();
     void close();
-    void save();
     void logOut();
+    bool isOpen();
     void newItem();
     void readItem();
     void readItemAt(int index);
     void writeItem();
     void writeItem(int index);
+    void deleteLastRecord();
+    vector<int> getYears();
     void printItemsForAllYears();
     void printItemsForYear(int year);
     void printItemsForYearAndMonth(int years, int month);
     void printItemsBetweenDates(Date dateRangeStart, Date dateRangeEnd);
-    void deleteLastRecord();
-    static void createDataSource(char* username);
-    static void deleteDataSource(char* username);
-    static char* getFilePath(char* username);
-    char* getFilePath();
-    char* getName();
+    static void createDataSource(string username);
+    static void deleteDataSource(string username);
+    static string getFilePath(string username);
+    string getFilePath();
+    string getName();
     int getNoOfItems();
     float getSpent();
-    vector<int> getYears();
-    bool isOpen();
 };
+
+// contructors
 User :: ~User() {
     logOut();
 }
-
-User :: User(char username[30]) {
-    strcpy(this->username, username);
+User :: User(string username) {
+    strcpy(this->username, username.c_str());
     file = new fstream();
 }
 
+/* truncate data from the user file and starts over
+ */
 void User::reset() {
-    close();
+    this->close();
     fstream f(username, ios::out | ios::trunc);
     f.close();
-    open();
+    this->open();
 }
 
-bool User :: isOpen() {
-    bool isOpen = file->is_open();
-    if(isOpen) {
-        printf("file is open");
-    } else {
-        printf("file is not open");
-    }
-    getch();
-    return isOpen;
-}
-
-char* User :: getFilePath(char username[]) {
-    char filePath[100] = "Data/";
-    strcpy(filePath, strcat(filePath, username));
-    return filePath;
-}
-
-char* User :: getFilePath() {
-    char filePath[100] = "Data/";
-    strcpy(filePath, strcat(filePath, this->username));
-    return filePath;
-}
-
-char* User :: getName() {
-    return this->username;
-}
-
-void User :: createDataSource(char username[]) {
-    string filePath = "Data/" + (string)username;
-    fstream file(filePath, ios::out);
-    file.close();
-}
-
-void User :: deleteDataSource(char username[]) {
-    char filePath[100] = "Data/";
-    strcat(filePath, username);
-    remove((char*)filePath);
-}
-
+/* opens file of user's name
+ */
 void User :: open() {
-    char filePath[100] = "Data/";
-    strcat(filePath, this->username);
-    file->open(filePath, ios::in | ios::out | ios::binary | ios::ate);
+    file->open(this->getFilePath().c_str(), ios::in | ios::out | ios::binary | ios::ate);
     calculateSpent();
 }
 
+/* closes and opens the current user's file to make realtime changes in the file to be reflected
+ */
+void User::reload() {
+    User::close();
+    User::open();
+}
+
+/* closes the current user's file
+ */
 void User :: close() {
     if(!file)
         return;
@@ -108,49 +82,88 @@ void User :: close() {
         file->close();
 }
 
-void User::save() {
-    User::close();
-    User::open();
-}
-
+/* closes the file and deallocates file pointer memory
+ */
 void User::logOut() {
     close();
     delete file;
     file = nullptr;
 }
 
-// create a new item to save
+/* checks if the current user's file is open or not
+ */
+bool User :: isOpen() {
+    bool flag = file->is_open();
+    if(flag) {
+        printf("file is open");
+    } else {
+        printf("file is not open");
+    }
+    getch();
+    return flag;
+}
+
+/* create a new item object complete with to be saved 
+ */
 void User::newItem() {
     item.askForItem();
     item.print();
 }
 
-// read item from <username> file from current cursor position
+/* read item from current user's file from current cursor position
+ */
 void User::readItem() {
     file->read((char*)&item, sizeof(Item));
 }
 
-// Read item details from <username> file from specified index
+/* Read item details from current user's file from specified index
+ */
 void User::readItemAt(int index) {
-    file->seekg(index * sizeof(Item));
+    file->seekg(index * sizeof(Item), ios::beg);
     file->read((char*)&item, sizeof(Item));
 }
 
+/* appends the item details in current user's file with User->item
+ */
 void User::writeItem() {
     file->seekp(0, ios::end);
     file->write((char*)&item, sizeof(Item));
-    this->save();
+    this->reload();
 }
 
-/* Overwrites the Item details in <username> file at specified index
+/* Overwrites the Item details in current user's file at specified index
  * with User->item
-*/
+ */
 void User::writeItem(int index) {
     file->seekp(index * sizeof(Item));
     file->write((char*)&item, sizeof(Item));
-    this->save();
+    this->reload();
 }
 
+/* deletes the last item written in current user's file.
+ * A new temperary file is created and all but last item from original file
+ * is copied to temperary file.
+ * The original file is then deleted and the temperary file is renamed as
+ * original file.
+ */
+void User::deleteLastRecord() {
+    fstream tempUserFile("Data/tempUserFile", ios::out | ios::binary | ios::app);
+    Item tempItem;
+    file->seekg(0, ios::beg);
+    for(int i = 0; i < getNoOfItems() - 1; ++i) {
+        file->read((char*)&tempItem, sizeof(Item));
+        tempUserFile.write((char*)&tempItem, sizeof(Item));
+    }
+    tempUserFile.close();
+    file->close();
+    remove(this->getFilePath().c_str());
+    rename("Data/tempUserFile", this->getFilePath().c_str());
+    this->open();
+}
+
+/* prints item from all years, basically each and every item in current
+ * user's file
+ */
 void User::printItemsForAllYears() {
     vector<int> years = this->getYears();
     Date dateRangeStart, daterangeEnd;
@@ -162,8 +175,9 @@ void User::printItemsForAllYears() {
     this->printItemsBetweenDates(dateRangeStart, daterangeEnd);
 }
 
-void User::printItemsForYear(int year)
-{
+/* prints all item for the specified year
+ */
+void User::printItemsForYear(int year) {
     Date DateRangeStart, dateRangeEnd;
     DateRangeStart.setDate(year, 1, 1);
     dateRangeEnd.setDate(year, 12, 31);
@@ -173,8 +187,9 @@ void User::printItemsForYear(int year)
     this->printItemsBetweenDates(DateRangeStart, dateRangeEnd);
 }
 
-void User::printItemsForYearAndMonth(int year, int month)
-{
+/* prints all items for the year and month
+ */
+void User::printItemsForYearAndMonth(int year, int month) {
     Date dateRangeStart, dateRangeEnd;
     dateRangeStart.setDate(year, month, 1);
     dateRangeEnd = dateRangeStart.getEndOfMonth();
@@ -184,6 +199,8 @@ void User::printItemsForYearAndMonth(int year, int month)
     this->printItemsBetweenDates(dateRangeStart, dateRangeEnd);
 }
 
+/* prints all item between specified date range
+ */
 void User::printItemsBetweenDates(Date dateRangeStart, Date dateRangeEnd) {
     float spent = 0;
     file->seekg(0, ios::beg);
@@ -199,39 +216,29 @@ void User::printItemsBetweenDates(Date dateRangeStart, Date dateRangeEnd) {
     }
     Item::printTotal(spent);
 }
-
-void User::deleteLastRecord()
-{
-    fstream tempUserFile("Data/tempUserFile", ios::out | ios::binary | ios::app);
-    Item tempItem;
-    char userFilepath[100] = "Data/";
-    strcat(userFilepath, this->username);
-    file->seekg(0, ios::beg);
-    for(int i = 0; i < getNoOfItems() - 1; ++i)
-    {
-        file->read((char*)&tempItem, sizeof(Item));
-        tempUserFile.write((char*)&tempItem, sizeof(Item));
-    }
-    tempUserFile.close();
-    file->close();
-    remove(userFilepath);
-    rename("Data/tempUserFile", userFilepath);
-    this->open();
+/* create a new file of specified name
+ */
+void User :: createDataSource(string username) {
+    fstream file(User::getFilePath(username).c_str(), ios::out);
+    file.close();
 }
 
-int User::getNoOfItems() {
-    return this->noOfItems;
+/* delete the file of specified name
+ */
+void User :: deleteDataSource(string username) {
+    remove(User::getFilePath(username).c_str());
 }
 
+/* return a colllection of years presentin the current user's file
+ */
 vector<int> User::getYears() {
     vector<int> years;
-    Item tempItem;
     int year;
     bool isYearNotPresent;
     file->seekg(0, ios::beg);
     for (int i = 0; i < this->getNoOfItems(); ++i ) {
         this->readItem();
-        year = item.getDate().getYear();
+        year = this->item.getDate().getYear();
         isYearNotPresent = true;
         for (int j = 0; j < years.size(); ++j) {
             if(years.at(j) == year) {
@@ -245,15 +252,22 @@ vector<int> User::getYears() {
     return years;
 }
 
+/* counts the no of item present in current user's file
+ * the position of put pointer of file is equal to size of file, which when 
+ * divided by size of Item class gives no of items
+ */
 void User::countNoOfItems() {
     file->seekp(0, ios::end);
     int filesize = (int)file->tellp();
     printf("%d", filesize);
-    if(filesize < 0)
+    if(filesize < 0) {
         filesize = 0;
+    }
     this->noOfItems = (filesize / (sizeof(Item)));
 }
 
+/* calculate the total amount spent
+ */
 void User::calculateSpent() {
     float spent = 0;
     this->countNoOfItems();
@@ -265,6 +279,19 @@ void User::calculateSpent() {
     this->spent = spent;
 }
 
+// getter methods
+string User :: getFilePath(string username) {
+    return "Data/" + username;
+}
+string User :: getFilePath() {
+    return "Data/" + this->getName();
+}
+string User :: getName() {
+    return this->username;
+}
+int User::getNoOfItems() {
+    return this->noOfItems;
+}
 float User::getSpent() {
     return this->spent;
 }

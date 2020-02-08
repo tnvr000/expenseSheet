@@ -5,7 +5,6 @@
 #include <string>
 
 #include "Menu.cpp"
-// #include "Date.cpp"
 #include "Account.cpp"
 #include "User.cpp"
 
@@ -27,7 +26,7 @@ void createAccount() {
         printf("Enter your name : ");
         fflush(stdin);
         gets(name);
-        user.setName(name);
+        user.getAccountData()->setName(name);
         if(user.isAvailable() == 0) {
             printf("THIS USERNAME ALREADY TAKEN. DO WANT TRY ANOTHER ONE (Yes/No) ? : ");
             fflush(stdin);
@@ -62,12 +61,12 @@ void createAccount() {
         }
 
     }
-    user.setName(name);
-    user.setPassword(password);
-    user.setNoOfItems(0);
-    user.setSpent(0);
+    user.getAccountData()->setName(name);
+    user.getAccountData()->setPassword(password);
+    user.getAccountData()->setNoOfItems(0);
+    user.getAccountData()->setSpent(0);
     user.write();
-    User::createDataSource(user.getName());
+    User::createDataSource(user.getAccountData()->getName());
     printf("\nACCOUNT CREATED SUCCESSFULLY!\n");
 }
 
@@ -125,7 +124,7 @@ void deleteAccount() {
 
         if (user.authenticate(password)) {
             user.erase();
-            User::deleteDataSource(user.getName());
+            User::deleteDataSource(user.getAccountData()->getName());
             return;
         } else {
             printf("INCORRECT PASSWORD. DO YOU WANT TO TRY AGAIN (Yes/No) ? : ");
@@ -243,7 +242,7 @@ void displayMonths()
 }
 
 void updateAccountDetails(Account* userAccount, User* user) {
-    userAccount->setSpent(user->getSpent());
-    userAccount->setNoOfItems(user->getNoOfItems());
+    userAccount->getAccountData()->setSpent(user->getSpent());
+    userAccount->getAccountData()->setNoOfItems(user->getNoOfItems());
     userAccount->save();
 }
