@@ -31,9 +31,7 @@ class Item {
 int Item::index = 0;
 
 // contructors
-Item :: Item() {
-    ;
-}
+Item :: Item() { ; }
 Item :: Item(Date date, string name, float price, string remark) {
     this->date.setDate(date);
     strcpy(this->name, name.c_str());
@@ -50,18 +48,18 @@ Item :: Item(int year, int month, int day, string name, float price, string rema
 /* promts for input item details via console
  */
 void Item :: askForItem() {
-    date.askForDate();
+    this->date.askForDate();
     printf("Enter name of Item : ");
     fflush(stdin);
-    gets(name);
+    gets(this->name);
     
     printf("Enter prie of item : ");
     fflush(stdin);
-    scanf("%f", &price);
+    scanf("%f", &this->price);
 
     printf("Enter remark of item : ");
     fflush(stdin);
-    gets(remark);
+    gets(this->remark);
 }
 
 /* prints headers for displaying item list
@@ -159,7 +157,8 @@ void Item :: print() {
     cout.width(9);
     cout.unsetf(ios::left);
     cout.setf(ios::right);
-    cout<<this->price<<"|";
+    cout<<this->price;
+    cout<<"|";
 
     // Remarks
     cout.width(20);
@@ -212,14 +211,14 @@ void Item::printTotal(float spent) {
 
 // getters
 Date Item::getDate() {
-    return date.getDate();
+    return this->date.getDate();
 }
 string Item :: getName() {
-    return name;
+    return this->name;
 }
 float Item :: getPrice() {
-    return price;
+    return this->price;
 }
 string Item :: getRemark() {
-    return remark;
+    return this->remark;
 }

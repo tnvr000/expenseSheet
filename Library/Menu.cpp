@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <vector>
+
+using namespace std;
 
 void introduction() {
     printf("\n\n\n\n\n\t\t\t");
@@ -19,6 +22,21 @@ void accountMenu() {
     printf(" 3 : DELETE LAST ENTRY\n");
     printf(" 4 : LOG OUT\n");
     printf("\n ENTER YOUR CHOICE : ");
+}
+
+void displayMonths() {
+    printf("1  : January\n");
+    printf("2  : Febuary\n");
+    printf("3  : March\n");
+    printf("4  : April\n");
+    printf("5  : May\n");
+    printf("6  : June\n");
+    printf("7  : July\n");
+    printf("8  : August\n");
+    printf("9  : Setember\n");
+    printf("10 : October\n");
+    printf("11 : November\n");
+    printf("12 : December\n");
 }
 
 void closingLine() {

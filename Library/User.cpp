@@ -43,11 +43,11 @@ class User {
 
 // contructors
 User :: ~User() {
-    logOut();
+    this->logOut();
 }
 User :: User(string username) {
     strcpy(this->username, username.c_str());
-    file = new fstream();
+    this->file = new fstream();
 }
 
 /* truncate data from the user file and starts over
@@ -63,7 +63,7 @@ void User::reset() {
  */
 void User :: open() {
     file->open(this->getFilePath().c_str(), ios::in | ios::out | ios::binary | ios::ate);
-    calculateSpent();
+    this->calculateSpent();
 }
 
 /* closes and opens the current user's file to make realtime changes in the file to be reflected
@@ -76,58 +76,52 @@ void User::reload() {
 /* closes the current user's file
  */
 void User :: close() {
-    if(!file)
+    if(!this->file) {
         return;
-    if(isOpen())
+    }
+    if(this->isOpen()) {
         file->close();
+    }
 }
 
 /* closes the file and deallocates file pointer memory
  */
 void User::logOut() {
     close();
-    delete file;
-    file = nullptr;
+    delete this->file;
+    this->file = nullptr;
 }
 
 /* checks if the current user's file is open or not
  */
 bool User :: isOpen() {
-    bool flag = file->is_open();
-    if(flag) {
-        printf("file is open");
-    } else {
-        printf("file is not open");
-    }
-    getch();
-    return flag;
+    return this->file->is_open();
 }
 
 /* create a new item object complete with to be saved 
  */
 void User::newItem() {
-    item.askForItem();
-    item.print();
+    this->item.askForItem();
 }
 
 /* read item from current user's file from current cursor position
  */
 void User::readItem() {
-    file->read((char*)&item, sizeof(Item));
+    this->file->read((char*)&this->item, sizeof(Item));
 }
 
 /* Read item details from current user's file from specified index
  */
 void User::readItemAt(int index) {
-    file->seekg(index * sizeof(Item), ios::beg);
-    file->read((char*)&item, sizeof(Item));
+    this->file->seekg(index * sizeof(Item), ios::beg);
+    this->file->read((char*)&this->item, sizeof(Item));
 }
 
 /* appends the item details in current user's file with User->item
  */
 void User::writeItem() {
-    file->seekp(0, ios::end);
-    file->write((char*)&item, sizeof(Item));
+    this->file->seekp(0, ios::end);
+    this->file->write((char*)&this->item, sizeof(Item));
     this->reload();
 }
 
@@ -135,8 +129,8 @@ void User::writeItem() {
  * with User->item
  */
 void User::writeItem(int index) {
-    file->seekp(index * sizeof(Item));
-    file->write((char*)&item, sizeof(Item));
+    this->file->seekp(index * sizeof(Item));
+    this->file->write((char*)&this->item, sizeof(Item));
     this->reload();
 }
 
@@ -149,13 +143,13 @@ void User::writeItem(int index) {
 void User::deleteLastRecord() {
     fstream tempUserFile("Data/tempUserFile", ios::out | ios::binary | ios::app);
     Item tempItem;
-    file->seekg(0, ios::beg);
+    this->file->seekg(0, ios::beg);
     for(int i = 0; i < getNoOfItems() - 1; ++i) {
-        file->read((char*)&tempItem, sizeof(Item));
+        this->file->read((char*)&tempItem, sizeof(Item));
         tempUserFile.write((char*)&tempItem, sizeof(Item));
     }
     tempUserFile.close();
-    file->close();
+    this->file->close();
     remove(this->getFilePath().c_str());
     rename("Data/tempUserFile", this->getFilePath().c_str());
     this->open();
@@ -203,14 +197,14 @@ void User::printItemsForYearAndMonth(int year, int month) {
  */
 void User::printItemsBetweenDates(Date dateRangeStart, Date dateRangeEnd) {
     float spent = 0;
-    file->seekg(0, ios::beg);
-    item.printHeaders();
+    this->file->seekg(0, ios::beg);
+    this->item.printHeaders();
     cout<<endl;
     for(int i = 0; i < this->getNoOfItems(); ++i) {
         this->readItem();
-        if(item.getDate() >= dateRangeStart && item.getDate() <= dateRangeEnd) {
-            spent += item.getPrice();
-            item.print();
+        if(this->item.getDate() >= dateRangeStart && this->item.getDate() <= dateRangeEnd) {
+            spent += this->item.getPrice();
+            this->item.print();
             cout<<"\n";
         }
     }
@@ -235,7 +229,7 @@ vector<int> User::getYears() {
     vector<int> years;
     int year;
     bool isYearNotPresent;
-    file->seekg(0, ios::beg);
+    this->file->seekg(0, ios::beg);
     for (int i = 0; i < this->getNoOfItems(); ++i ) {
         this->readItem();
         year = this->item.getDate().getYear();
@@ -257,9 +251,8 @@ vector<int> User::getYears() {
  * divided by size of Item class gives no of items
  */
 void User::countNoOfItems() {
-    file->seekp(0, ios::end);
-    int filesize = (int)file->tellp();
-    printf("%d", filesize);
+    this->file->seekp(0, ios::end);
+    int filesize = (int)this->file->tellp();
     if(filesize < 0) {
         filesize = 0;
     }
@@ -271,7 +264,7 @@ void User::countNoOfItems() {
 void User::calculateSpent() {
     float spent = 0;
     this->countNoOfItems();
-    file->seekg(0, ios::beg);
+    this->file->seekg(0, ios::beg);
     for(int i = 0; i < this->getNoOfItems(); ++i) {
         this->readItem();
         spent += this->item.getPrice();

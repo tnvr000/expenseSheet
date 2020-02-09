@@ -35,14 +35,14 @@ fstream* Account::file = new fstream();
 int Account::noOfAccounts = 0;
 int Account::index = 0;
 
+// constructors
 Account::Account () { ; }
-
 Account::Account (string name, string password, int noOfItems, float spent) {
-    data.setName(name);
-    data.setPassword(password);
-    data.setNoOfItems(noOfItems);
-    data.setSpent(spent);
-    index = 0;
+    this->data.setName(name);
+    this->data.setPassword(password);
+    this->data.setNoOfItems(noOfItems);
+    this->data.setSpent(spent);
+    Account::index = 0;
 }
 
 /* a file, if doesn't exist, will not be opened unless it is opened in "out"  and "append" mode
@@ -57,15 +57,15 @@ void Account :: createFile() {
  * makes it available to every object of Account class
  */
 void Account :: openFile() {
-    countNoOfAccounts();
-    file->open("Data/AccountFile.txt", ios::in | ios::out | ios::binary | ios::ate);
+    Account::countNoOfAccounts();
+    Account::file->open("Data/AccountFile.txt", ios::in | ios::out | ios::binary | ios::ate);
 }
 
 /* closes the file and delete the allocated memory
  */
 void Account :: closeFile() {
-    file->close();
-    delete file;
+    Account::file->close();
+    delete Account::file;
 }
 
 /* count the no of users recored in the file for convinience
@@ -75,7 +75,7 @@ void Account :: countNoOfAccounts () {
     fstream f("Data/AccountFile.txt", ios::in | ios::binary);
     f.seekp(0, ios::end);
     int fileSize = f.tellp();
-    noOfAccounts = fileSize/(sizeof(AccountData));
+    Account::noOfAccounts = fileSize/(sizeof(AccountData));
     f.close();
 }
 
@@ -83,13 +83,9 @@ void Account :: countNoOfAccounts () {
  */
 bool Account :: isFileOpen() {
     bool flag = false;
-    if(*file) {
-        printf("File is open\n");
+    if(*Account::file) {
         flag = true;
-    } else {
-        printf("File is not open\n");
     }
-    getch();
     return flag;
 }
 
@@ -98,22 +94,22 @@ bool Account :: isFileOpen() {
  * Generally called immediatly
  */ 
 void Account::readNext() {
-    file->read((char*)&data, sizeof(AccountData));
+    Account::file->read((char*)&data, sizeof(AccountData));
 }
 
 /* reads the account details from AccountFile.txt from specified user index
  * cursor position is calculated by multiply index to size of AccountData
  */
 void Account::readAtIndex(int index) {
-    file->seekg(index * sizeof(AccountData));
-    readNext();
+    Account::file->seekg(index * sizeof(AccountData));
+    this->readNext();
 }
 
 /* reads the account details from AccountFile.txt at index Account->index
  */
 void Account::read() {
-    file->seekp(Account::index * sizeof(AccountData));
-    readNext();
+    Account::file->seekp(Account::index * sizeof(AccountData));
+    this->readNext();
 }
 
 /* prints the AccountData->data on the screen
@@ -125,12 +121,12 @@ void Account::print() {
 /* prints all account details in AccountFile.txt prefixed with thier position
  */
 void Account::printAll() {
-    file->seekg(0, ios::beg);
+    Account::file->seekg(0, ios::beg);
     int currentAccountIndex = 0;
-    while(currentAccountIndex++ < noOfAccounts) {
-        readNext();
+    while(currentAccountIndex++ < Account::noOfAccounts) {
+        this->readNext();
         printf("%5d : ", currentAccountIndex);
-        print();
+        this->print();
         printf("\n");
     }
 }
@@ -139,17 +135,17 @@ void Account::printAll() {
  * Used for adding new user
  */
 void Account::write() {
-    file->seekp(0, ios::end);
-    file->write((char*)&data, sizeof(AccountData));
-    noOfAccounts += 1;
+    Account::file->seekp(0, ios::end);
+    Account::file->write((char*)&data, sizeof(AccountData));
+    Account::noOfAccounts += 1;
 }
 
 /* Overwrites the account details in AccountFile.txt
  * of specified index with AccountData->data 
  */
 void Account::write(int index) {
-    file->seekp(index * sizeof(AccountData), ios::beg);
-    file->write((char*)&data, sizeof(AccountData));
+    Account::file->seekp(index * sizeof(AccountData), ios::beg);
+    Account::file->write((char*)&data, sizeof(AccountData));
 }
 
 /* save the changes made in the AccountData->data
@@ -166,19 +162,18 @@ void Account::save() {
 void Account::erase() {
     fstream tempFile("Data/tempAccountFile.txt", ios::out | ios::binary | ios::app);
     AccountData tempData;
-    file->seekg(0, ios::beg);
-    for (int i = 0; i < noOfAccounts; ++i) {
-        file->read((char*)&tempData, sizeof(AccountData));
+    Account::file->seekg(0, ios::beg);
+    for (int i = 0; i < Account::noOfAccounts; ++i) {
+        Account::file->read((char*)&tempData, sizeof(AccountData));
         if (i != index) {
             tempFile.write((char*)&tempData, sizeof(AccountData));
         }
     }
     tempFile.close();
-    file->close();
+    Account::file->close();
     remove ("Data/AccountFile.txt");
     rename ("Data/tempAccountFile.txt", "Data/AccountFile.txt");
-    openFile();
-    printf("ACCOUNT DELETED");
+    Account::openFile();
 }
 
 /* Authenticate the password
@@ -186,8 +181,8 @@ void Account::erase() {
  * if not, return 0
  */
 bool Account::authenticate(string password) {
-    readAtIndex(Account::index);
-    return data.getPassword() == password;
+    this->readAtIndex(Account::index);
+    return this->data.getPassword() == password;
 }
 
 /* Check if Account->data.name is avialable for an new user or not
@@ -195,12 +190,12 @@ bool Account::authenticate(string password) {
  * else returns 0
  */
 bool Account::isAvailable() {
-    file->seekg(0, ios::beg);
+    Account::file->seekg(0, ios::beg);
     AccountData tempData;
     int currentAccountIndex = 0;
-    while(currentAccountIndex++ < noOfAccounts) {
-        file->read((char*)&tempData, sizeof(AccountData));
-        if(tempData.getName() == data.getName()) {
+    while(currentAccountIndex++ < Account::noOfAccounts) {
+        Account::file->read((char*)&tempData, sizeof(AccountData));
+        if(tempData.getName() == this->data.getName()) {
             return false;
         }
     }
@@ -210,7 +205,7 @@ bool Account::isAvailable() {
 /* sets the AccountData->data.spent and AccountData->data.noOfItems to 0
  */
 void Account::reset() {
-    data.reset();
+    this->data.reset();
 }
 
 // setter methods

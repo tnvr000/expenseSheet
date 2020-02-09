@@ -8,6 +8,8 @@
 #include "Account.cpp"
 #include "User.cpp"
 
+using namespace std;
+
 void listUsers() {
     Account user;
     int noOfAccounts = user.getNoOfAccounts();
@@ -125,6 +127,7 @@ void deleteAccount() {
         if (user.authenticate(password)) {
             user.erase();
             User::deleteDataSource(user.getAccountData()->getName());
+            printf("ACCOUNT DELETED SUCCESSFULLY");
             return;
         } else {
             printf("INCORRECT PASSWORD. DO YOU WANT TO TRY AGAIN (Yes/No) ? : ");
@@ -141,45 +144,46 @@ void addItem(User* user) {
     system("cls");
     user->newItem();
     user->writeItem();
-    getch();
+    printf("ITEM RECORDED");
 }
 
-void monhtlyDisplayMenu(User* user, int year)
-{
-    void displayMonths();
+void updateAccountDetails(Account* userAccount, User* user) {
+    userAccount->getAccountData()->setSpent(user->getSpent());
+    userAccount->getAccountData()->setNoOfItems(user->getNoOfItems());
+    userAccount->save();
+}
+
+void displayYears(vector<int> years) {
+    for(int index = 0; index < years.size(); ++index) {
+        printf("%d : %d\n", (index + 1), years.at(index));
+    }
+}
+
+void monhtlyDisplayMenu(User* user, int year) {
     int monthChoice;
-    do
-    {
+    do {
         system("cls");
         displayMonths();
         printf("13 : DISPLAY ALL EXPENSE THIS YEAR\n14 : BACK\n");
         printf("\nCHOOSE AN OPTION : ");
         scanf("%d", &monthChoice);
 
-        if(monthChoice >= 1 && monthChoice <= 12)
-        {
+        if(monthChoice >= 1 && monthChoice <= 12) {
             user->printItemsForYearAndMonth(year, monthChoice);
             getch();
-        }
-        else if (monthChoice == 13)
-        {
+        } else if (monthChoice == 13) {
             user->printItemsForYear(year);
             getch();
-        }
-        else
-        {
+        } else {
             monthChoice = 14;
         }
     } while(monthChoice != 14);
 }
 
-void yearlyDisplayMenu(User* user) 
-{
-    void displayYears(vector<int> years);
+void yearlyDisplayMenu(User* user) {
     vector<int> years = user->getYears();
     int yearChoice, lastYearPosition, lastYearIndex;
-    do 
-    {
+    do {
         system("cls");
         displayYears(years);
         lastYearPosition = years.size();
@@ -187,17 +191,12 @@ void yearlyDisplayMenu(User* user)
         printf("%d : BACK\n", (lastYearPosition + 2));
         printf("\nCHOOSE AN OPTION : ");
         scanf("%d", &yearChoice);
-        if(yearChoice >= 1 && yearChoice <= lastYearPosition)
-        {
+        if(yearChoice >= 1 && yearChoice <= lastYearPosition) {
             monhtlyDisplayMenu(user, years.at(yearChoice - 1));
-        }
-        else if (yearChoice == (lastYearPosition + 1)) 
-        {
+        } else if (yearChoice == (lastYearPosition + 1)) {
             user->printItemsForAllYears();
             getch();
-        }
-        else
-        {
+        } else {
             // year choice can be (lastYearPosition + 2) or greater than that
             // So if it greater than that then...
             yearChoice = lastYearPosition + 2;
@@ -206,8 +205,7 @@ void yearlyDisplayMenu(User* user)
     } while (yearChoice != (lastYearPosition + 2));
 }
 
-void deleteItem(User* user)
-{
+void deleteItem(User* user) {
     system("cls");
     user->deleteLastRecord();
     printf("LAST RECORD DELETED");
@@ -215,34 +213,4 @@ void deleteItem(User* user)
 
 void displayMenu(User* user) {
     yearlyDisplayMenu(user);
-}
-
-void displayYears(vector<int> years)
-{
-    for(int index = 0; index < years.size(); ++index)
-    {
-        printf("%d : %d\n", (index + 1), years.at(index));
-    }
-}
-
-void displayMonths()
-{
-    printf("1  : January\n");
-    printf("2  : Febuary\n");
-    printf("3  : March\n");
-    printf("4  : April\n");
-    printf("5  : May\n");
-    printf("6  : June\n");
-    printf("7  : July\n");
-    printf("8  : August\n");
-    printf("9  : Setember\n");
-    printf("10 : October\n");
-    printf("11 : November\n");
-    printf("12 : December\n");
-}
-
-void updateAccountDetails(Account* userAccount, User* user) {
-    userAccount->getAccountData()->setSpent(user->getSpent());
-    userAccount->getAccountData()->setNoOfItems(user->getNoOfItems());
-    userAccount->save();
 }

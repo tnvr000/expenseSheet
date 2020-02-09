@@ -31,8 +31,8 @@ class AccountData {
 AccountData::AccountData() {
     strcpy(name, "");
     strcpy(password, "");
-    spent = 0;
-    noOfItems = 0;
+    this->spent = 0;
+    this->noOfItems = 0;
 }
 AccountData::AccountData(string name, string password, float spent, int noOfItems) {
     strcpy(this->name, name.c_str());
@@ -44,13 +44,13 @@ AccountData::AccountData(string name, string password, float spent, int noOfItem
 /* prints account details in a format
  */
 void AccountData::printAccount() {
-    printf("%-20s %6.2f %-15d\n", name, spent, noOfItems);
+    printf("%-20s %6.2f %-15d\n", this->name, this->spent, this->noOfItems);
 }
 
 /* resets noOfItems and spent to 0 in the object
  */
 void AccountData::reset() {
-    spent = noOfItems = 0;
+    this->spent = this->noOfItems = 0;
 }
 
 // setter methods
@@ -69,14 +69,14 @@ void AccountData::setSpent(float spent) {
 
 // getter methods
 string AccountData::getName() {
-    return name;
+    return this->name;
 }
 string AccountData::getPassword() {
-    return password;
+    return this->password;
 }
 int AccountData::getNoOfItems() {
-    return noOfItems;
+    return this->noOfItems;
 }
 float AccountData::getSpent() {
-    return spent;
+    return this->spent;
 }

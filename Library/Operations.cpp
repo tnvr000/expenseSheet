@@ -1,4 +1,7 @@
+#include <iostream>
 #include "Utility.cpp"
+
+using namespace std;
 
 void accountOperation(int userPosition) {
     int userMenuChoice;
@@ -18,11 +21,11 @@ void accountOperation(int userPosition) {
         switch(userMenuChoice) {
         case 1  : 
             displayMenu(&user);
-            getch();
             break;
         case 2  :
             addItem(&user);
             updateAccountDetails(&userDetails, &user);
+            getch();
             break;
         case 3  :
             deleteItem(&user);
@@ -33,7 +36,6 @@ void accountOperation(int userPosition) {
             // The destrutor will cleanup the object and memory
             user.logOut();
             printf("\nLOGGED OUT SUCCESSFULLY.");
-            getch();
             return;
         default :
             printf("\nINVALID CHOICE! TRY AGAIN.");

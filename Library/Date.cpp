@@ -39,7 +39,7 @@ class Date {
 };
 // constructors
 Date ::Date() {
-    day = month = year = 0;
+    this->day = this->month = this->year = 0;
 }
 
 Date ::Date(int year) {
@@ -57,7 +57,7 @@ Date::Date(int year, int month, int day) {
     this->day = day;
     this->month = month;
     this->year = year;
-    validateDate();
+    this->validateDate();
 }
 
 /* promt for input date via console
@@ -67,7 +67,7 @@ void Date::askForDate() {
     printf("Enter the date (dd/mm/yyyy) : ");
     fflush(stdin);
     scanf("%d%c%d%c%d", &day, &temp, &month, &temp, &year);
-    validateDate();
+    this->validateDate();
 }
 
 /* print the data to comsoole in format dd/mm/yyyy
@@ -130,13 +130,13 @@ void Date::setDate(int year, int month, int day) {
     this->day = day;
     this->month = month;
     this->year = year;
-    validateDate();
+    this->validateDate();
 }
 void Date::setDate(Date date) {
     this->day = date.day;
     this->month = date.month;
     this->year = date.year;
-    validateDate();
+    this->validateDate();
 }
 
 // getter methods
@@ -154,10 +154,10 @@ Date Date::getDate() {
     return date;
 }
 Date Date::getBeginingOfMonth() {
-    return Date(this->getYear(), this->getMonth(), 1);
+    return Date(this->year, this->month, 1);
 }
 Date Date::getBeginingOfYear() {
-    return Date(this->getYear(), 1, 1);
+    return Date(this->year, 1, 1);
 }
 Date Date::getEndOfMonth() {
     return Date(this->year, this->month, this->getLastDayOfMonth());
