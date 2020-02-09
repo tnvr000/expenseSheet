@@ -206,9 +206,18 @@ void yearlyDisplayMenu(User* user) {
 }
 
 void deleteItem(User* user) {
+    char deleteChoice;
     system("cls");
-    user->deleteLastRecord();
-    printf("LAST RECORD DELETED");
+    printf("ARE YOUR SURE YOU WANT TO DELETE THE LAST RECORED ITEM?(y/n) : ");
+    fflush(stdin);
+    scanf("%c", &deleteChoice);
+    if(deleteChoice == 'y' || deleteChoice == 'Y') {
+        Item item = user->deleteLastRecord();
+        printf("LAST RECORD DELETED\n");
+        item.print();
+    } else {
+        printf("NO ACTION TAKEN");
+    }
 }
 
 void displayMenu(User* user) {

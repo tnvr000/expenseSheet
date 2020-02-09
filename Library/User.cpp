@@ -26,7 +26,7 @@ class User {
     void readItemAt(int index);
     void writeItem();
     void writeItem(int index);
-    void deleteLastRecord();
+    Item deleteLastRecord();
     vector<int> getYears();
     void printItemsForAllYears();
     void printItemsForYear(int year);
@@ -140,7 +140,7 @@ void User::writeItem(int index) {
  * The original file is then deleted and the temperary file is renamed as
  * original file.
  */
-void User::deleteLastRecord() {
+Item User::deleteLastRecord() {
     fstream tempUserFile("Data/tempUserFile", ios::out | ios::binary | ios::app);
     Item tempItem;
     this->file->seekg(0, ios::beg);
@@ -148,11 +148,13 @@ void User::deleteLastRecord() {
         this->file->read((char*)&tempItem, sizeof(Item));
         tempUserFile.write((char*)&tempItem, sizeof(Item));
     }
+    this->file->read((char*)&tempItem, sizeof(Item));
     tempUserFile.close();
     this->file->close();
     remove(this->getFilePath().c_str());
     rename("Data/tempUserFile", this->getFilePath().c_str());
     this->open();
+    return tempItem;
 }
 
 /* prints item from all years, basically each and every item in current
