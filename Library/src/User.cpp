@@ -1,51 +1,18 @@
+#include <iostream>
+#include <fstream>
 #include <string>
-#include "Item.cpp"
 #include "vector"
 
-class User {
-    Item item;
-    int noOfItems, index;
-    float spent;
-    fstream *file;
-    char username[30];
-    void open(string username);
-    void countNoOfItems();
-    void calculateSpent();
+#include "../Item.h"
+#include "../User.h"
 
-    public:
-    ~User();
-    User(string username);
-    void reset();
-    void open();
-    void reload();
-    void close();
-    void logOut();
-    bool isOpen();
-    void newItem();
-    void readItem();
-    void readItemAt(int index);
-    void writeItem();
-    void writeItem(int index);
-    Item deleteLastRecord();
-    vector<int> getYears();
-    void printItemsForAllYears();
-    void printItemsForYear(int year);
-    void printItemsForYearAndMonth(int years, int month);
-    void printItemsBetweenDates(Date dateRangeStart, Date dateRangeEnd);
-    static void createDataSource(string username);
-    static void deleteDataSource(string username);
-    static string getFilePath(string username);
-    string getFilePath();
-    string getName();
-    int getNoOfItems();
-    float getSpent();
-};
+using namespace std;
 
 // contructors
-User :: ~User() {
+User::~User() {
     this->logOut();
 }
-User :: User(string username) {
+User::User(string username) {
     strcpy(this->username, username.c_str());
     this->file = new fstream();
 }
@@ -61,7 +28,7 @@ void User::reset() {
 
 /* opens file of user's name
  */
-void User :: open() {
+void User::open() {
     file->open(this->getFilePath().c_str(), ios::in | ios::out | ios::binary | ios::ate);
     this->calculateSpent();
 }
@@ -75,7 +42,7 @@ void User::reload() {
 
 /* closes the current user's file
  */
-void User :: close() {
+void User::close() {
     if(!this->file) {
         return;
     }
@@ -94,7 +61,7 @@ void User::logOut() {
 
 /* checks if the current user's file is open or not
  */
-bool User :: isOpen() {
+bool User::isOpen() {
     return this->file->is_open();
 }
 
@@ -214,14 +181,14 @@ void User::printItemsBetweenDates(Date dateRangeStart, Date dateRangeEnd) {
 }
 /* create a new file of specified name
  */
-void User :: createDataSource(string username) {
+void User::createDataSource(string username) {
     fstream file(User::getFilePath(username).c_str(), ios::out);
     file.close();
 }
 
 /* delete the file of specified name
  */
-void User :: deleteDataSource(string username) {
+void User::deleteDataSource(string username) {
     remove(User::getFilePath(username).c_str());
 }
 
@@ -275,13 +242,13 @@ void User::calculateSpent() {
 }
 
 // getter methods
-string User :: getFilePath(string username) {
+string User::getFilePath(string username) {
     return "Data/" + username;
 }
-string User :: getFilePath() {
+string User::getFilePath() {
     return "Data/" + this->getName();
 }
-string User :: getName() {
+string User::getName() {
     return this->username;
 }
 int User::getNoOfItems() {

@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <vector>
 
+#include "../Menu.h"
+
 using namespace std;
 
 void introduction() {

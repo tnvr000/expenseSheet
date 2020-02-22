@@ -2,52 +2,21 @@
 #include <conio.h>
 #include <iostream>
 
+#include "../Date.h"
+
 using namespace std;
 
-class Date {
-    private:
-    int day, month, year;
-
-    public:
-    Date();
-    Date(int year);
-    Date(int year, int month);
-    Date(int year, int month, int day);
-    void askForDate();
-    void printDate();
-    void validateDate();
-    bool is31DayMonth();
-    bool is30DayMonth();
-    bool isLeapYear();
-    void setDate(int year, int month, int day);
-    void setDate(Date);
-    int getDay();
-    int getMonth();
-    int getYear();
-    Date getDate();
-    Date getBeginingOfMonth();
-    Date getBeginingOfYear();
-    Date getEndOfMonth();
-    Date getEndOfYear();
-    int getLastDayOfMonth();
-    int operator==(Date otherDate);
-    int operator!=(Date othreDate);
-    int operator>(Date otherDate);
-    int operator<(Date otherDate);
-    int operator>=(Date otherDate);
-    int operator<=(Date otherDate);
-};
 // constructors
-Date ::Date() {
+Date::Date() {
     this->day = this->month = this->year = 0;
 }
 
-Date ::Date(int year) {
+Date::Date(int year) {
     this->year = year;
     this->month = this->day = 0;
 }
 
-Date ::Date(int year, int month) {
+Date::Date(int year, int month) {
     this->year = year;
     this->month = month;
     this-> day = 0;
@@ -72,7 +41,7 @@ void Date::askForDate() {
 
 /* print the data to comsoole in format dd/mm/yyyy
  */
-void Date ::printDate() {
+void Date::printDate() {
     printf("%02d/%02d/%d", day, month, year);
 }
 

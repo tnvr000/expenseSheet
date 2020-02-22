@@ -5,40 +5,23 @@
 #include <stdlib.h>
 #include <string.h>
 #include <fstream>
-#include "Date.cpp"
 
-class Item {
-    Date date;
-    char name[30], remark[20];
-    static int index;
-    float price;
+#include "../Date.h"
+#include "../Item.h"
 
-    public:
-    Item();
-    Item(Date date, string name, float price, string remark);
-    Item(int year, int month, int day, string name, float price, string remark);
-    void askForItem();
-    void printHeaders();
-    void print();
-    static void printUnderlines();
-    static void printTotal(float spent);
-    Date getDate();
-    string getName();
-    float getPrice();
-    string getRemark();
-};
+using namespace std;
 
 int Item::index = 0;
 
 // contructors
-Item :: Item() { ; }
-Item :: Item(Date date, string name, float price, string remark) {
+Item::Item() { ; }
+Item::Item(Date date, string name, float price, string remark) {
     this->date.setDate(date);
     strcpy(this->name, name.c_str());
     this->price = price;
     strcpy(this->remark, remark.c_str());
 }
-Item :: Item(int year, int month, int day, string name, float price, string remark) {
+Item::Item(int year, int month, int day, string name, float price, string remark) {
     this->date.setDate(year, month, day);
     strcpy(this->name, name.c_str());
     this->price = price;
@@ -47,7 +30,7 @@ Item :: Item(int year, int month, int day, string name, float price, string rema
 
 /* promts for input item details via console
  */
-void Item :: askForItem() {
+void Item::askForItem() {
     this->date.askForDate();
     printf("Enter name of Item : ");
     fflush(stdin);
@@ -133,7 +116,7 @@ void Item::printUnderlines() {
 
 /* prints items details in a format
  */
-void Item :: print() {
+void Item::print() {
     char fillingChar[2] = {' ', '-'};
     date.printDate();
     cout<<"|";
@@ -213,12 +196,12 @@ void Item::printTotal(float spent) {
 Date Item::getDate() {
     return this->date.getDate();
 }
-string Item :: getName() {
+string Item::getName() {
     return this->name;
 }
-float Item :: getPrice() {
+float Item::getPrice() {
     return this->price;
 }
-string Item :: getRemark() {
+string Item::getRemark() {
     return this->remark;
 }

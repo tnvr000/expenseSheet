@@ -4,9 +4,9 @@
 #include <fstream>
 #include <string>
 
-#include "Menu.cpp"
-#include "Account.cpp"
-#include "User.cpp"
+#include "Menu.h"
+#include "Account.h"
+#include "User.h"
 
 using namespace std;
 

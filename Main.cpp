@@ -1,5 +1,7 @@
 #include "Library/Operations.cpp"
 
+using namespace std;
+
 int main()
 {
     int MainMenuChoice;

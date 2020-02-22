@@ -1,35 +1,10 @@
+#include <fstream>
 #include <string.h>
-#include "AccountData.cpp"
-class Account { 
-    AccountData data;
-    static int noOfAccounts, index;
-    static fstream* file;
-    public:
-    Account ();
-    Account (string name, string password, int noOfItems, float spent);
 
-    static void createFile();
-    static void openFile();
-    static void closeFile();
-    static void countNoOfAccounts ();
-    static bool isFileOpen();
-    
-    void readNext();
-    void readAtIndex(int index);
-    void read();
-    void print();
-    void printAll();
-    void write();
-    void write(int index);
-    void save();
-    void erase();
-    bool authenticate(string password);
-    bool isAvailable();
-    void reset();
-    void setIndex(int index);
-    int getNoOfAccounts();
-    AccountData* getAccountData();
-};
+#include "../AccountData.h"
+#include "../Account.h"
+
+using namespace std;
 
 fstream* Account::file = new fstream();
 int Account::noOfAccounts = 0;
@@ -48,7 +23,7 @@ Account::Account (string name, string password, int noOfItems, float spent) {
 /* a file, if doesn't exist, will not be opened unless it is opened in "out"  and "append" mode
  * but opening a file in append mean the get and put pointers can't to changed by seekg() and seekp()
  */
-void Account :: createFile() {
+void Account::createFile() {
     fstream f("Data/AccountFile.txt", ios::in | ios::out | ios::binary | ios::app);
     f.close();
 }
@@ -56,21 +31,21 @@ void Account :: createFile() {
 /* OpenFile() streams the "AccountFile.txt" file accessible by file attribute which is static,
  * makes it available to every object of Account class
  */
-void Account :: openFile() {
+void Account::openFile() {
     Account::countNoOfAccounts();
     Account::file->open("Data/AccountFile.txt", ios::in | ios::out | ios::binary | ios::ate);
 }
 
 /* closes the file and delete the allocated memory
  */
-void Account :: closeFile() {
+void Account::closeFile() {
     Account::file->close();
     delete Account::file;
 }
 
 /* count the no of users recored in the file for convinience
  */
-void Account :: countNoOfAccounts () {
+void Account::countNoOfAccounts () {
     Account tempAccount;
     fstream f("Data/AccountFile.txt", ios::in | ios::binary);
     f.seekp(0, ios::end);
@@ -81,7 +56,7 @@ void Account :: countNoOfAccounts () {
 
 /* checks if the AccountFile.txt is open or not
  */
-bool Account :: isFileOpen() {
+bool Account::isFileOpen() {
     bool flag = false;
     if(*Account::file) {
         flag = true;
